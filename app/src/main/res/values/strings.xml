@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Sao Longuinho</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    //STRING PARA O APP
+    <string name="descricaoDocumento">CNH - RG - CPF - TÍTULO DE ELEITOR - RESERVISTA</string>
+    <string name="descricaoDocVeiculo">CRLV - RECIBO</string>
+    <string name="descricaoDocCartao">TODOS OS TIPOS DE CARTÕES, CARTEIRINHA DE ESCOLA, CARTÃO DE ÔNIBUS</string>
+    <string name="cartao">Cartão</string>
+    <string name="documento">Documento</string>
+    <string name="documentoVeiculo">Documento Veiculo</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+</resources>
