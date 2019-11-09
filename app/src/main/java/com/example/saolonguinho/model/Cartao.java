@@ -8,15 +8,30 @@ public class Cartao {
     //ULTIMOS 4 DIGITOS DO CARTÃO
     private String digitos;
     //NOME DA PESSOA QUE ACHOU | ID DA PESSOA
-    private String nomePessoaachou;
-    //DATA EM QUE A PESSOA ACHOU
-    private String dataEntrada;
+    private String idPessoaachou;
+    //DATA EM QUE A FOI INSERIDO NO BANCO
+    private String dataInseridoNoBanco;
     //DATA EM QUE FOI ENCOTRADO O DONO DO CARTÃO
     private String dataSaida;
     //IDENTIFICADOR UNICO PARA O CARTÃO
     private String idCartao;
     //STATUS DO DADO NO BANCO | SERVE PARA SABER SE O ITEM FOI ENCONTRADO
     private boolean status;
+    //DATA EM QUE A PESSOA ACHOU
+    private String dataEncontrado;
+
+    public String getDataEncontrado() {
+        return dataEncontrado;
+    }
+
+    public void setDataEncontrado(String dataEncontrado) {
+        this.dataEncontrado = dataEncontrado;
+    }
+
+    public Cartao() {
+        this.dataSaida = "00-00-0000";
+        this.status = true;
+    }
 
     public String getNome() {
         return nome;
@@ -42,20 +57,20 @@ public class Cartao {
         this.digitos = digitos;
     }
 
-    public String getNomePessoaachou() {
-        return nomePessoaachou;
+    public String getIdPessoaachou() {
+        return idPessoaachou;
     }
 
-    public void setNomePessoaachou(String nomePessoaachou) {
-        this.nomePessoaachou = nomePessoaachou;
+    public void setIdPessoaachou(String nomePessoaachou) {
+        this.idPessoaachou = nomePessoaachou;
     }
 
     public String getDataEntrada() {
-        return dataEntrada;
+        return dataInseridoNoBanco;
     }
 
-    public void setDataEntrada(String dataEntrada) {
-        this.dataEntrada = dataEntrada;
+    public void setDataEntradaNoBanco(String dataEntrada) {
+        this.dataInseridoNoBanco = dataEntrada;
     }
 
     public String getDataSaida() {
