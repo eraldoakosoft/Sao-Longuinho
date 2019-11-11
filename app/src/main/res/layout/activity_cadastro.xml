@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".activities.CadastroActivity">
 
     <ScrollView
@@ -34,7 +35,8 @@
             android:layout_marginRight="10dp"
             android:text="Crie Sua Conta Grátis"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textSize="25sp"
+            android:textColor="@color/colorBranco"/>
 
         <EditText
             android:id="@+id/editTextNome"
@@ -45,7 +47,9 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="Nome"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="@color/colorBranco"
+            android:textColorHint="@color/colorBranco"/>
 
 
         <EditText
@@ -57,7 +61,10 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="Email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="@color/colorBranco"
+            android:textColorHint="@color/colorBranco"
+            />
 
         <EditText
             android:id="@+id/editTextSenha"
@@ -68,7 +75,9 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="Senha"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/colorBranco"
+            android:textColorHint="@color/colorBranco"/>
 
         <EditText
             android:id="@+id/editTextConfirmaSenha"
@@ -79,7 +88,10 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="Confirmar Senha"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/colorBranco"
+            android:textColorHint="@color/colorBranco"
+            />
 
         <EditText
             android:id="@+id/editTextCPF"
@@ -90,7 +102,10 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="CPF"
-            android:inputType="number" />
+            android:inputType="number"
+            android:textColor="@color/colorBranco"
+            android:textColorHint="@color/colorBranco"
+            />
 
         <EditText
             android:id="@+id/editTextRG"
@@ -101,7 +116,10 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="RG"
-            android:inputType="numberSigned" />
+            android:inputType="numberSigned"
+            android:textColor="@color/colorBranco"
+            android:textColorHint="@color/colorBranco"
+            />
 
         <EditText
             android:id="@+id/editTextDataNascimento"
@@ -112,7 +130,10 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="Data Nascimento"
-            android:inputType="date" />
+            android:inputType="date"
+            android:textColor="@color/colorBranco"
+            android:textColorHint="@color/colorBranco"
+            />
 
         <EditText
             android:id="@+id/editTextNomeMae"
@@ -123,7 +144,10 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="Nome da Mãe"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textColor="@color/colorBranco"
+            android:textColorHint="@color/colorBranco"
+            />
 
         <EditText
             android:id="@+id/editTextTelefone"
@@ -134,7 +158,10 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="Telefone"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:textColor="@color/colorBranco"
+            android:textColorHint="@color/colorBranco"
+            />
 
         <EditText
             android:id="@+id/editTextCEP"
@@ -145,7 +172,9 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="CEP"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:textColor="@color/colorBranco"
+            android:textColorHint="@color/colorBranco"/>
 
         <Button
             android:id="@+id/buttonCadastrar"
@@ -154,7 +183,10 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            android:text="Cadastrar" />
+            android:text="Cadastrar"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/colorBranco"
+            android:layout_marginBottom="10dp"/>
     </LinearLayout>
 
     </ScrollView>

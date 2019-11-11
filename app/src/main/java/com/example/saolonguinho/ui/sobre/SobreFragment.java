@@ -1,4 +1,4 @@
-package com.example.saolonguinho.ui.share;
+package com.example.saolonguinho.ui.sobre;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,22 +14,15 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.saolonguinho.R;
 
-public class ShareFragment extends Fragment {
+public class SobreFragment extends Fragment {
 
-    private ShareViewModel shareViewModel;
+    private SobreViewModel shareViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         shareViewModel =
-                ViewModelProviders.of(this).get(ShareViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_share, container, false);
-        final TextView textView = root.findViewById(R.id.text_share);
-        shareViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+                ViewModelProviders.of(this).get(SobreViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_sobre, container, false);
         return root;
     }
 }

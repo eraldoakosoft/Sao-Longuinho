@@ -31,7 +31,7 @@
                 android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/textViewDocVei"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Documento Veiculo"
@@ -44,7 +44,7 @@
                     android:layout_marginBottom="15dp"/>
 
                 <EditText
-                    android:id="@+id/editText2"
+                    android:id="@+id/textViewDocVeiNomeCompleto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -57,7 +57,7 @@
                     android:layout_marginTop="15dp"/>
 
                 <EditText
-                    android:id="@+id/editText3"
+                    android:id="@+id/textViewDocVeiCPF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -70,11 +70,11 @@
                     android:layout_marginTop="15dp"/>
 
                 <EditText
-                    android:id="@+id/editText4"
+                    android:id="@+id/textViewDocVeiPlaca"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:textColor="@color/colorBranco"
                     android:textColorHint="@color/colorBranco"
                     android:hint="Placa"
@@ -83,11 +83,11 @@
                     android:layout_marginTop="15dp"/>
 
                 <EditText
-                    android:id="@+id/editText5"
+                    android:id="@+id/textViewDocVeiModelo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:textColor="@color/colorBranco"
                     android:textColorHint="@color/colorBranco"
                     android:hint="Modelo / Marca"
@@ -96,11 +96,11 @@
                     android:layout_marginTop="15dp"/>
 
                 <EditText
-                    android:id="@+id/editText6"
+                    android:id="@+id/textViewDocVeiDataEncontrado"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="number"
+                    android:inputType="date"
                     android:textColor="@color/colorBranco"
                     android:textColorHint="@color/colorBranco"
                     android:hint="Data Encontrado"
@@ -109,7 +109,7 @@
                     android:layout_marginTop="15dp"/>
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/buttonDocVeiAdicionar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Adicionar"
