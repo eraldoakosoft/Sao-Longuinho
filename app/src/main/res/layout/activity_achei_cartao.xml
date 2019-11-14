@@ -84,7 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="number"
+                    android:inputType="date"
                     android:hint="Data encontrado"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="15dp"
