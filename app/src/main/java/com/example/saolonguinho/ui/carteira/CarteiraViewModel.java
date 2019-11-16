@@ -1,16 +1,15 @@
-package com.example.saolonguinho.ui.slideshow;
+package com.example.saolonguinho.ui.carteira;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SlideshowViewModel extends ViewModel {
+public class CarteiraViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public SlideshowViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is slideshow fragment");
+    public CarteiraViewModel() {
+
     }
 
     public LiveData<String> getText() {

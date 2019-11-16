@@ -16,6 +16,16 @@
     <string name="documento">Documento</string>
     <string name="documentoVeiculo">Documento Veiculo</string>
 
+    <string-array name="menu">
+        <item>RG</item>
+        <item>CPF</item>
+        <item>Catão</item>
+        <item>CRLV</item>
+        <item>CNH</item>
+        <item>Carteira de Trabalho</item>
+        <item>Reservista</item>
+    </string-array>
+
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -32,4 +42,5 @@
     <string name="configuracao">Configurações</string>
     <string name="sobre">Sobre</string>
     <string name="achei">Achei</string>
+    <string name="carteira">Carteira</string>
 </resources>
