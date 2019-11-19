@@ -33,6 +33,19 @@
         <item>CREDITO</item>
     </string-array>
 
+    <string-array name="menuAcheiVei">
+        <item>RECIBO</item>
+        <item>CRLV</item>
+    </string-array>
+
+    <string-array name="menuAcheiDoc">
+        <item>RG</item>
+        <item>CPF</item>
+        <item>CNH</item>
+        <item>TITULO DE ELEITOR</item>
+        <item>RESERVISTA</item>
+    </string-array>
+
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>

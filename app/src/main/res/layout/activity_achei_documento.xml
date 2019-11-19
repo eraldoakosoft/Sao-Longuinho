@@ -45,6 +45,37 @@
 
                    />
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp">
+
+
+
+                    <TextView
+                        android:id="@+id/textViewti"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tipo"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorBranco"
+                        android:textAlignment="textStart"
+                        />
+                    <Spinner
+                        android:id="@+id/spinnerAcheiDoc"
+                        android:scrollbarSize="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        />
+
+                </LinearLayout>
+
+
                 <EditText
                     android:id="@+id/editTextDocNomeCompleto"
                     android:layout_width="match_parent"
@@ -142,6 +173,46 @@
                     android:layout_marginRight="10dp"
                     android:textColor="@color/colorBranco"
                     android:textColorHint="@color/colorBranco"/>
+
+                <EditText
+                    android:id="@+id/editTextDocDescricao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:hint="@string/descri_o"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/colorBranco"
+                    android:textColorHint="@color/colorBranco"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="15dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="170dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/ic_image_black_24dp"
+                        android:id="@+id/imageViewDocImagem1"
+                        />
+
+                    <ImageView
+                        android:layout_width="170dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/ic_image_black_24dp"
+                        android:id="@+id/imageViewDocImagem2"
+                        />
+
+                </LinearLayout>
+
+
 
                 <Button
                     android:id="@+id/buttonDocAdicionar"

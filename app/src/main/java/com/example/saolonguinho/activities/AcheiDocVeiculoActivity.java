@@ -2,10 +2,18 @@ package com.example.saolonguinho.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.saolonguinho.R;
@@ -18,13 +26,16 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
-public class AcheiDocVeiculoActivity extends AppCompatActivity {
+public class AcheiDocVeiculoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     //VARIAVEIS LOCAIS PARA RECEBER DADOS DAS ACTIVITY
-    private EditText campoNome, campoCPF, campoPlaca, campoDataEncontrado, campoModelo;
+    private EditText campoNome, campoCPF, campoPlaca, campoDataEncontrado, campoModelo, campoDescicao;
     private Button btnAdicionar;
+
+    private Spinner spinnerAVei;
 
     //INSTACIA DO FIREBASE
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("DocumentoVeiculo");
@@ -33,6 +44,11 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     //INSTANCIA CLASSE DOCUMENTO VEICULO
     private DocumentoVeiculo documentoVeiculo;
+
+    //CONFIGURAÇÃO PARA O CALENDARIO
+    Calendar calendar;
+    android.app.DatePickerDialog datePickerDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +61,56 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity {
         campoPlaca = findViewById(R.id.textViewDocVeiPlaca);
         campoDataEncontrado = findViewById(R.id.textViewDocVeiDataEncontrado);
         campoModelo = findViewById(R.id.textViewDocVeiModelo);
+        campoDescicao = findViewById(R.id.editTextVeiDescricao);
         btnAdicionar = findViewById(R.id.buttonDocVeiAdicionar);
+
+
+
+
+
+        campoDataEncontrado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideSoftKeyboard();
+                calendar = Calendar.getInstance();
+                int dia = calendar.get(Calendar.DAY_OF_MONTH);
+                int mes = calendar.get(Calendar.MONTH);
+                int ano = calendar.get(Calendar.YEAR);
+
+
+                datePickerDialog = new android.app.DatePickerDialog(AcheiDocVeiculoActivity.this, new android.app.DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        String data = "00-00-0000";
+                        if ((month+1) < 10 ){
+                            data = dayOfMonth + "/0" + (month+1) + "/" + year;
+                            if(dayOfMonth <= 9){
+                                data ="0"+ dayOfMonth + "/0" + (month+1) + "/" + year;
+                            }
+                        }else{
+                            if(dayOfMonth <= 9){
+                                data ="0"+ dayOfMonth + "/" + (month+1) + "/" + year;
+                            }
+                            data = dayOfMonth + "/" + (month+1) + "/" + year;
+                        }
+
+
+                        campoDataEncontrado.setText(data);
+                    }
+                }, dia, mes, ano);
+                datePickerDialog.getDatePicker().updateDate(ano, mes,dia);
+
+                datePickerDialog.show();
+            }
+        });
+
+
+        spinnerAVei = findViewById(R.id.spinnerAcheiVei);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.menuAcheiVei, R.layout.support_simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinnerAVei.getBackground().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_ATOP);
+        spinnerAVei.setAdapter(adapter);
+        spinnerAVei.setOnItemSelectedListener( this );
 
         btnAdicionar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +119,17 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    /**
+     * Esconda o teclado
+     */
+    public void hideSoftKeyboard() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     public void salvar(){
@@ -72,7 +148,11 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity {
         documentoVeiculo.setNome(campoNome.getText().toString());
         documentoVeiculo.setPlaca(campoPlaca.getText().toString());
         documentoVeiculo.setModelo(campoModelo.getText().toString());
+        documentoVeiculo.setDescricao(campoDescicao.getText().toString());
         documentoVeiculo.setDataEntradaNoBanco(getDateTime());
+
+
+
 
         reference.push().setValue(documentoVeiculo);
         Toast.makeText(AcheiDocVeiculoActivity.this, "Salvo com Secesso!", Toast.LENGTH_SHORT).show();
@@ -85,5 +165,17 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String text = parent.getItemAtPosition(position).toString();
+        ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+        ((TextView) parent.getChildAt(0)).setTextSize(18);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

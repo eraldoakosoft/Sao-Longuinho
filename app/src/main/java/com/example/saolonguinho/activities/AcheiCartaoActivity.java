@@ -201,7 +201,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String text = parent.getItemAtPosition(position).toString();
         ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-        ((TextView) parent.getChildAt(0)).setTextSize(18);
+        ((TextView) parent.getChildAt(0)).setTextSize(20);
     }
 
     @Override

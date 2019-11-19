@@ -2,11 +2,19 @@ package com.example.saolonguinho.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.saolonguinho.R;
@@ -19,9 +27,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
-public class AcheiDocumentoActivity extends AppCompatActivity {
+public class AcheiDocumentoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener{
 
     //VARIAVEIS LOCAIS PARA RECEBER O QUE VEM DA TELA
     private EditText campoNome, campoCPF, campoRG, campoDataNascimento;
@@ -34,6 +43,12 @@ public class AcheiDocumentoActivity extends AppCompatActivity {
     private Documento documento;
     //PEGAR INISTACIA DO FIREBASE AUTH
     private FirebaseAuth firebaseAuth;
+
+    private Spinner spinnerADoc;
+
+    //CONFIGURAÇÃO PARA O CALENDARIO
+    Calendar calendar;
+    android.app.DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +65,28 @@ public class AcheiDocumentoActivity extends AppCompatActivity {
         campoNomeMae = findViewById(R.id.editTextDocNomeMae);
         campoRG = findViewById(R.id.editTextDocRg);
         btnAdicionar = findViewById(R.id.buttonDocAdicionar);
+
+        campoDataEncontrado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirCalendar(1);
+            }
+        });
+
+        campoDataNascimento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirCalendar(2);
+            }
+        });
+
+
+        spinnerADoc = findViewById(R.id.spinnerAcheiDoc);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.menuAcheiDoc, R.layout.support_simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinnerADoc.getBackground().setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_ATOP);
+        spinnerADoc.setAdapter(adapter);
+        spinnerADoc.setOnItemSelectedListener( this );
 
 
 
@@ -86,6 +123,9 @@ public class AcheiDocumentoActivity extends AppCompatActivity {
         documento.setDataCadastroNoBanco(getDateTime());
         documento.setIdQuemAchou(idUsuario);
 
+
+
+
         //MANDANDO PARA O FIREBASE
         reference.push().setValue(documento);
         Toast.makeText(AcheiDocumentoActivity.this, "Salvo com Sucesso!", Toast.LENGTH_SHORT).show();
@@ -101,4 +141,62 @@ public class AcheiDocumentoActivity extends AppCompatActivity {
         return dateFormat.format(date);
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String text = parent.getItemAtPosition(position).toString();
+        ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+        ((TextView) parent.getChildAt(0)).setTextSize(20);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    /**
+     * Esconda o teclado
+     */
+    public void hideSoftKeyboard() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+
+    public void abrirCalendar(final int i){
+        hideSoftKeyboard();
+        calendar = Calendar.getInstance();
+        int dia = calendar.get(Calendar.DAY_OF_MONTH);
+        int mes = calendar.get(Calendar.MONTH);
+        int ano = calendar.get(Calendar.YEAR);
+
+
+        datePickerDialog = new android.app.DatePickerDialog(AcheiDocumentoActivity.this, new android.app.DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String data = "00-00-0000";
+                if ((month+1) < 10 ){
+                    data = dayOfMonth + "/0" + (month+1) + "/" + year;
+                    if(dayOfMonth <= 9){
+                        data ="0"+ dayOfMonth + "/0" + (month+1) + "/" + year;
+                    }
+                }if(dayOfMonth <= 9 && (month+1) > 9){
+                        data ="0"+ dayOfMonth + "/" + (month+1) + "/" + year;
+                    }
+                if (i == 1){
+                    campoDataEncontrado.setText(data);
+                }else if(i == 2){
+                    campoDataNascimento.setText(data);
+                }
+            }
+        }, dia, mes, ano);
+        datePickerDialog.getDatePicker().updateDate(ano, mes,dia);
+        datePickerDialog.show();
+    }
 }
