@@ -1,5 +1,10 @@
 package com.example.saolonguinho.model;
 
+import com.example.saolonguinho.config.ConfiguracaoFirebase;
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.List;
+
 public class Cartao {
     //NOME IGUAL A ESTÁ NO CARTÃO
     private String nome;
@@ -21,10 +26,32 @@ public class Cartao {
     private String dataEncontrado;
     //TIPO DE CARÃO
     private String tipo;
+    //UMA BREVE DESCRIÇÃO DO INTEM
+    private String descricao;
+
+    private List<String> fotos;
 
     public Cartao() {
         this.dataSaida = "00-00-0000";
         this.status = true;
+        DatabaseReference  databaseReference = ConfiguracaoFirebase.getFirebase().child("Cartoes1");
+        setIdCartao( databaseReference.push().getKey() );
+    }
+
+    public List<String> getFotos() {
+        return fotos;
+    }
+
+    public void setFotos(List<String> fotos) {
+        this.fotos = fotos;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public String getIdCartao() {

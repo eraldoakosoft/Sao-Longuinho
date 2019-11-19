@@ -66,8 +66,6 @@ public class HomeFragment extends Fragment {
 
         Query cartoesPesquisa = reference.orderByChild("status").equalTo(true);
 
-
-
         cartoesPesquisa.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -115,10 +113,6 @@ public class HomeFragment extends Fragment {
             }
 
         });
-
-
-
-
 
 
 

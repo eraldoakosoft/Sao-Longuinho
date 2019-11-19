@@ -1,19 +1,26 @@
 package com.example.saolonguinho.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
+
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
-import android.view.WindowManager;
+
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,25 +28,35 @@ import android.widget.Toast;
 import com.example.saolonguinho.R;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.helper.Base64Custon;
+import com.example.saolonguinho.helper.Permissoes;
 import com.example.saolonguinho.model.Cartao;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
+import java.util.List;
 
-public class AcheiCartaoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+public class AcheiCartaoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     //VARIAVEIS LOCAIS PARA RECEBER DADOS DA ACTIVITY
-    private EditText campoNome, campo4Digitos, campoBanco, campoDataAchou;
+    private EditText campoNome, campo4Digitos, campoBanco, campoDataAchou, campoDescricao;
     private Button btnAdicionar;
+    private ImageView imagem1, imagem2;
+    private List<String> listaFotosRecuperadas = new ArrayList<>();
+
+    //RECUPERAR O OBJETO STORAGE
+    private StorageReference storageReference;
 
 
     //SPINNER
@@ -54,6 +71,12 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
 
     private int year, month, day, hour, minute;
 
+    private String[] permissoes = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+
+    };
+
 
     //CONFIGURAÇÃO PARA O CALENDARIO
     Calendar calendar;
@@ -65,11 +88,22 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         setContentView(R.layout.activity_achei_cartao);
         getSupportActionBar().hide();
 
+        Permissoes.validarPermissoes(permissoes,this,1);
+
+        //CONFIGURAÇÕES INICIAIS
+        storageReference = FirebaseStorage.getInstance().getReference();
+
         //PASANDO DADOS PARA AS VARIAVEIS LOCAIS
+        imagem1 = findViewById(R.id.imageViewCarImagem1);
+        imagem2 = findViewById(R.id.imageViewCarImagem2);
+        imagem2.setOnClickListener(this);
+        imagem1.setOnClickListener(this);
+
         campo4Digitos = findViewById(R.id.editTextCar4Digitos);
         campoBanco = findViewById(R.id.editTextCarBanco);
         campoNome = findViewById(R.id.editTextCarNome);
         campoDataAchou = findViewById(R.id.editTextCarDataAchou);
+        campoDescricao = findViewById(R.id.editTextCarDescricao);
         btnAdicionar = findViewById(R.id.buttonCarAdicionar);
 
         campoDataAchou.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +164,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
 
     //METODO PARA SALVAR
     public void salvar(){
+        //salvarFotoStorage();
         //INSTACIAR UM NOVO OBJETO CARTAO
         cartao = new Cartao();
 
@@ -145,6 +180,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         cartao.setNome(campoNome.getText().toString().toUpperCase());
         cartao.setDataEncontrado(campoDataAchou.getText().toString());
         cartao.setIdPessoaachou(idUsuario);
+        cartao.setDescricao(campoDescricao.getText().toString());
         cartao.setTipo(spinnerAC.getSelectedItem().toString());
 
         reference.push().setValue(cartao);
@@ -183,5 +219,67 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.imageViewCarImagem1 :
+                escolherImagem(1);
+                break;
+
+            case R.id.imageViewCarImagem2 :
+                escolherImagem(2);
+                break;
+        }
+    }
+
+    //METODO ESCOLHER IMAGEM
+    public void escolherImagem(int requestCode){
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i,requestCode);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("************************* FORA: ");
+
+        //if( requestCode == Activity.RESULT_OK){
+
+            //RECUPERAR IMAGEM
+            Uri imagemSelecionada = data.getData();
+            String caminhoImagem = imagemSelecionada.toString();
+            System.out.println("*************************");
+            System.out.println("Caminho " + caminhoImagem);
+
+            if( requestCode == 1 ){
+                imagem1.setImageURI(imagemSelecionada);
+            }else if ( requestCode == 2 ){
+                imagem2.setImageURI(imagemSelecionada);
+
+            }
+            listaFotosRecuperadas.add(caminhoImagem);
+
+       // }
+    }
+
+
+    /**
+     * METODO PARA SALVAR FOTOS NO FIREBASE
+     * */
+    public void salvarFotoStorage(String url, int totalFotos, int contador){
+
+        //CRIAR A REFERENCIA STORAGE
+        StorageReference imagem = storageReference.child("imagens").child(cartao.getIdCartao()).child("imagem"+contador);
+
+        UploadTask uploadTask = imagem.putFile(Uri.parse(url));
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+            }
+        });
+
+    }
 }
 
