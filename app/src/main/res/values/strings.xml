@@ -26,6 +26,13 @@
         <item>Reservista</item>
     </string-array>
 
+    <string-array name="menuAcheiCartao">
+        <item>BANCO</item>
+        <item>MEDICO</item>
+        <item>ODONTOLOGICO</item>
+        <item>CREDITO</item>
+    </string-array>
+
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -43,4 +50,5 @@
     <string name="sobre">Sobre</string>
     <string name="achei">Achei</string>
     <string name="carteira">Carteira</string>
+    <string name="tipo">Tipo:</string>
 </resources>

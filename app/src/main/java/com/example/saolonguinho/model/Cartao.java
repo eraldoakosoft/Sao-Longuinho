@@ -4,7 +4,7 @@ public class Cartao {
     //NOME IGUAL A ESTÁ NO CARTÃO
     private String nome;
     //INSTITUIÇÃO EMISSORA DO CARTÃO
-    private String banco;
+    private String bancoEmissor;
     //ULTIMOS 4 DIGITOS DO CARTÃO
     private String digitos;
     //NOME DA PESSOA QUE ACHOU | ID DA PESSOA
@@ -19,18 +19,20 @@ public class Cartao {
     private boolean status;
     //DATA EM QUE A PESSOA ACHOU
     private String dataEncontrado;
-
-    public String getDataEncontrado() {
-        return dataEncontrado;
-    }
-
-    public void setDataEncontrado(String dataEncontrado) {
-        this.dataEncontrado = dataEncontrado;
-    }
+    //TIPO DE CARÃO
+    private String tipo;
 
     public Cartao() {
         this.dataSaida = "00-00-0000";
         this.status = true;
+    }
+
+    public String getIdCartao() {
+        return idCartao;
+    }
+
+    public void setIdCartao(String idCartao) {
+        this.idCartao = idCartao;
     }
 
     public String getNome() {
@@ -41,12 +43,12 @@ public class Cartao {
         this.nome = nome;
     }
 
-    public String getBanco() {
-        return banco;
+    public String getBancoEmissor() {
+        return bancoEmissor;
     }
 
-    public void setBanco(String banco) {
-        this.banco = banco;
+    public void setBancoEmissor(String bancoEmissor) {
+        this.bancoEmissor = bancoEmissor;
     }
 
     public String getDigitos() {
@@ -61,16 +63,16 @@ public class Cartao {
         return idPessoaachou;
     }
 
-    public void setIdPessoaachou(String nomePessoaachou) {
-        this.idPessoaachou = nomePessoaachou;
+    public void setIdPessoaachou(String idPessoaachou) {
+        this.idPessoaachou = idPessoaachou;
     }
 
-    public String getDataEntrada() {
+    public String getDataInseridoNoBanco() {
         return dataInseridoNoBanco;
     }
 
-    public void setDataEntradaNoBanco(String dataEntrada) {
-        this.dataInseridoNoBanco = dataEntrada;
+    public void setDataInseridoNoBanco(String dataInseridoNoBanco) {
+        this.dataInseridoNoBanco = dataInseridoNoBanco;
     }
 
     public String getDataSaida() {
@@ -81,19 +83,27 @@ public class Cartao {
         this.dataSaida = dataSaida;
     }
 
-    public String getIdCartao() {
-        return idCartao;
-    }
-
-    public void setIdCartao(String idCartao) {
-        this.idCartao = idCartao;
-    }
-
     public boolean isStatus() {
         return status;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public String getDataEncontrado() {
+        return dataEncontrado;
+    }
+
+    public void setDataEncontrado(String dataEncontrado) {
+        this.dataEncontrado = dataEncontrado;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 }

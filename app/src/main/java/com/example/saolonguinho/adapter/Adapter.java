@@ -9,9 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.saolonguinho.R;
+import com.example.saolonguinho.model.Cartao;
+
+
+import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
+    private List<Cartao> listaCartao;
+
+    public Adapter(List<Cartao> list) {
+        this.listaCartao = list;
+    }
 
     @NonNull
     @Override
@@ -23,17 +32,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.tipo.setText("RG");
-        holder.nomeAchou.setText("Marcos da Silva");
-        holder.nome.setText("Eraldo Simão Pereira");
-        holder.dataPublicacao.setText("11/11/2019");
-        holder.dataEncontrado.setText("08/10/2019");
+
+        Cartao cartao = listaCartao.get(position);
+        holder.tipo.setText(cartao.getTipo());
+        holder.nomeAchou.setText(cartao.getIdPessoaachou());
+        holder.nome.setText(cartao.getNome());
+        holder.dataPublicacao.setText(cartao.getDataInseridoNoBanco());
+        holder.dataEncontrado.setText(cartao.getDataEncontrado());
 
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return listaCartao.size();
+
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

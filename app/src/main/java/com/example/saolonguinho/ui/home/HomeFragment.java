@@ -19,17 +19,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.saolonguinho.R;
 import com.example.saolonguinho.adapter.Adapter;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
+import com.example.saolonguinho.model.Cartao;
+import com.example.saolonguinho.model.Documento;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
     //CRIANDO ATRIBUTO PARA RECICLEVIEW
     private RecyclerView recyclerView;
+    private List<Cartao> listaCartao = new ArrayList<>();
 
-    private DatabaseReference reference = ConfiguracaoFirebase.getFirebase();
+
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Cartoes1");
 
     private HomeViewModel homeViewModel;
 
@@ -41,20 +52,7 @@ public class HomeFragment extends Fragment {
 
         //FAZENDO REFERENCIA PARA O FRAGMENTO
         recyclerView = root.findViewById(R.id.recyclerHome);
-
-
-        //CONFIGURAR O ADAPTER
-        Adapter adapter = new Adapter();
-
-
-        //CONFIGURAR RECYCLEVIEW
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new DividerItemDecoration(root.getContext(), LinearLayout.VERTICAL));
-        recyclerView.setAdapter( adapter );
-
-
+        buscarDados();
 
         return root;
     }
@@ -64,10 +62,50 @@ public class HomeFragment extends Fragment {
     //RECUPERAR DADOS DO FIREBASE
     public void buscarDados(){
 
-        DatabaseReference cartoes = reference.child("Cartoes");
-        cartoes.addValueEventListener(new ValueEventListener() {
+        DatabaseReference cartoes = reference;
+
+        Query cartoesPesquisa = reference.orderByChild("status").equalTo(true);
+
+
+
+        cartoesPesquisa.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Cartao cartao = dataSnapshot.getValue(Cartao.class);
+                listaCartao.add(cartao);
+                //CONFIGURAR O ADAPTER
+                Adapter adapter = new Adapter( listaCartao );
+                //CONFIGURAR RECYCLEVIEW
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+                recyclerView.setAdapter( adapter );
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Cartao cartao = dataSnapshot.getValue(Cartao.class);
+                listaCartao.add(cartao);
+                //CONFIGURAR O ADAPTER
+                Adapter adapter = new Adapter( listaCartao );
+                //CONFIGURAR RECYCLEVIEW
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+                recyclerView.setAdapter( adapter );
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
             }
 
@@ -75,9 +113,15 @@ public class HomeFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+
         });
 
 
 
+
+
+
+
     }
+
 }
