@@ -15,6 +15,12 @@
     <string name="cartao">Cartão</string>
     <string name="documento">Documento</string>
     <string name="documentoVeiculo">Documento Veiculo</string>
+    <string name="sobre2">A perda de um objeto ou algo de valor pode causar grande prejuízo
+e diversos transtornos. Muitas vezes quem encontra um objeto tem dificuldade
+em devolvê-lo ao dono. Da mesma maneira, quem perdeu algo também sente
+a necessidade de informar a perda na expectativa de encontrar o objeto. O
+aplicativo São Longuinho permite cadastrar objetos perdidos e encontrados e
+        compartilhar as informações para facilitar o retorno de itens perdidos.</string>
 
     <string-array name="menu">
         <item>RG</item>
