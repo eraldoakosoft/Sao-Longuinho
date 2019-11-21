@@ -177,6 +177,8 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
             data = dia + "/0" + (mes+1) + "/" + ano;
         }else if( dia < 10 ){
             data = "0" + dia + "/" + (mes+1) + "/" + ano;
+        }else {
+            data = dia + "/" + (mes+1) + "/" + ano;
         }
 
         campoDataEncontrado.setText(data);

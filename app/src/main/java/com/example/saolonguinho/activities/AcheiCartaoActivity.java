@@ -282,6 +282,8 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
             data = dia + "/0" + (mes+1) + "/" + ano;
         }else if( dia < 10 ){
             data = "0" + dia + "/" + (mes+1) + "/" + ano;
+        }else {
+            data = dia + "/" + (mes+1) + "/" + ano;
         }
 
         return data;
