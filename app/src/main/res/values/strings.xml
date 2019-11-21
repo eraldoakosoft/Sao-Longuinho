@@ -53,11 +53,11 @@ aplicativo São Longuinho permite cadastrar objetos perdidos e encontrados e
     </string-array>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_gallery">Achei</string>
+    <string name="menu_slideshow">Carteira</string>
     <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="menu_share">Sobre</string>
+    <string name="menu_send">Sair</string>
     <string name="nome_completo">Nome Completo</string>
     <string name="cpf">CPF</string>
     <string name="rg">RG</string>
