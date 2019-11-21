@@ -6,4 +6,8 @@
     <color name="colorVerde">#4EBF8E</color>
     <color name="colorVerde2">#46AA7F</color>
     <color name="colorBranco">#FFFFFF</color>
+    <color name="colorRosa">#FF24CA</color>
+    <color name="colorRoxo">#7E009E</color>
+    <color name="color2">#909090</color>
+    <color name="colorBlack">#000000</color>
 </resources>

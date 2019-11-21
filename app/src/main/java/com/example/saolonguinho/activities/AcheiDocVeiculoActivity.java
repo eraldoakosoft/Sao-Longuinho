@@ -38,7 +38,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
     private Spinner spinnerAVei;
 
     //INSTACIA DO FIREBASE
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("DocumentoVeiculo");
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Modelo");
 
     //INSTANCIA PARA AUTENTICAÇÃO DO FIREBASE
     FirebaseAuth firebaseAuth;
@@ -81,21 +81,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
                 datePickerDialog = new android.app.DatePickerDialog(AcheiDocVeiculoActivity.this, new android.app.DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String data = "00-00-0000";
-                        if ((month+1) < 10 ){
-                            data = dayOfMonth + "/0" + (month+1) + "/" + year;
-                            if(dayOfMonth <= 9){
-                                data ="0"+ dayOfMonth + "/0" + (month+1) + "/" + year;
-                            }
-                        }else{
-                            if(dayOfMonth <= 9){
-                                data ="0"+ dayOfMonth + "/" + (month+1) + "/" + year;
-                            }
-                            data = dayOfMonth + "/" + (month+1) + "/" + year;
-                        }
-
-
-                        campoDataEncontrado.setText(data);
+                        formatarData(dayOfMonth, month, year);
                     }
                 }, dia, mes, ano);
                 datePickerDialog.getDatePicker().updateDate(ano, mes,dia);
@@ -144,12 +130,14 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         //PASSAR OS DADOS PARA O OBJETO DOCUMENTO VEICULO
         documentoVeiculo.setCpf(campoCPF.getText().toString());
         documentoVeiculo.setDataEncontrado(campoDataEncontrado.getText().toString());
-        documentoVeiculo.setIdPessoaAchou(idUsuario);
+        documentoVeiculo.setIdLonguinho(idUsuario);
         documentoVeiculo.setNome(campoNome.getText().toString());
         documentoVeiculo.setPlaca(campoPlaca.getText().toString());
         documentoVeiculo.setModelo(campoModelo.getText().toString());
         documentoVeiculo.setDescricao(campoDescicao.getText().toString());
-        documentoVeiculo.setDataEntradaNoBanco(getDateTime());
+        documentoVeiculo.setDataInseridoNoBanco(getDateTime());
+        documentoVeiculo.setUltimaAtualizacao(getDateTime());
+        documentoVeiculo.setTipo(spinnerAVei.getSelectedItem().toString());
 
 
 
@@ -178,4 +166,21 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
+
+    public void formatarData(int dia, int mes, int ano){
+        String data = "00/00/0000";
+        if ( (mes+1) < 10 && dia < 10 ){
+            data = "0" + dia + "/0" + (mes+1) + "/" + ano;
+        }else if( (mes+1) < 10 ){
+            data = dia + "/0" + (mes+1) + "/" + ano;
+        }else if( dia < 10 ){
+            data = "0" + dia + "/" + (mes+1) + "/" + ano;
+        }
+
+        campoDataEncontrado.setText(data);
+
+    }
+
 }

@@ -38,7 +38,9 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
     private Button btnAdicionar;
 
     //PEGAR INSTANCIA DO FIREBASE
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Documentos");
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Modelo");
+
+
     //INSTACIAR A CLASSE DOCUMENTO
     private Documento documento;
     //PEGAR INISTACIA DO FIREBASE AUTH
@@ -69,14 +71,44 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         campoDataEncontrado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirCalendar(1);
+                hideSoftKeyboard();
+                calendar = Calendar.getInstance();
+                int dia = calendar.get(Calendar.DAY_OF_MONTH);
+                int mes = calendar.get(Calendar.MONTH);
+                int ano = calendar.get(Calendar.YEAR);
+
+
+                datePickerDialog = new android.app.DatePickerDialog(AcheiDocumentoActivity.this, new android.app.DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        campoDataEncontrado.setText(formatarData(dayOfMonth, month,year));
+                    }
+                }, dia, mes, ano);
+                datePickerDialog.getDatePicker().updateDate(ano, mes,dia);
+                datePickerDialog.show();
+
             }
         });
 
         campoDataNascimento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirCalendar(2);
+                hideSoftKeyboard();
+                calendar = Calendar.getInstance();
+                int dia = calendar.get(Calendar.DAY_OF_MONTH);
+                int mes = calendar.get(Calendar.MONTH);
+                int ano = calendar.get(Calendar.YEAR);
+
+
+                datePickerDialog = new android.app.DatePickerDialog(AcheiDocumentoActivity.this, new android.app.DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        campoDataNascimento.setText(formatarData(dayOfMonth, month, year));
+                    }
+                }, dia, mes, ano);
+                datePickerDialog.getDatePicker().updateDate(ano, mes,dia);
+                datePickerDialog.show();
+
             }
         });
 
@@ -114,17 +146,16 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
 
         //PASSANDO OS DADOS PARA O OBJETO DOCUMENTO
         documento.setCpf(campoCPF.getText().toString());
-        documento.setDataAchado(campoDataEncontrado.getText().toString());
+        documento.setDataEncontrado(campoDataEncontrado.getText().toString());
         documento.setDataNascimento(campoDataNascimento.getText().toString());
         documento.setNaturalidade(campoNaturalidade.getText().toString());
         documento.setRg(campoRG.getText().toString());
         documento.setNomeMae(campoNomeMae.getText().toString());
         documento.setNome(campoNome.getText().toString());
-        documento.setDataCadastroNoBanco(getDateTime());
-        documento.setIdQuemAchou(idUsuario);
-
-
-
+        documento.setDataInseridoNoBanco(getDateTime());
+        documento.setUltimaAtualizacao(getDateTime());
+        documento.setIdLonguinho(idUsuario);
+        documento.setTipo(spinnerADoc.getSelectedItem().toString());
 
         //MANDANDO PARA O FIREBASE
         reference.push().setValue(documento);
@@ -169,34 +200,16 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
     }
 
 
-    public void abrirCalendar(final int i){
-        hideSoftKeyboard();
-        calendar = Calendar.getInstance();
-        int dia = calendar.get(Calendar.DAY_OF_MONTH);
-        int mes = calendar.get(Calendar.MONTH);
-        int ano = calendar.get(Calendar.YEAR);
+    public String formatarData(int dia, int mes, int ano){
+        String data = "00/00/0000";
+        if ( (mes+1) < 10 && dia < 10 ){
+            data = "0" + dia + "/0" + (mes+1) + "/" + ano;
+        }else if( (mes+1) < 10 ){
+            data = dia + "/0" + (mes+1) + "/" + ano;
+        }else if( dia < 10 ){
+            data = "0" + dia + "/" + (mes+1) + "/" + ano;
+        }
 
-
-        datePickerDialog = new android.app.DatePickerDialog(AcheiDocumentoActivity.this, new android.app.DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String data = "00-00-0000";
-                if ((month+1) < 10 ){
-                    data = dayOfMonth + "/0" + (month+1) + "/" + year;
-                    if(dayOfMonth <= 9){
-                        data ="0"+ dayOfMonth + "/0" + (month+1) + "/" + year;
-                    }
-                }if(dayOfMonth <= 9 && (month+1) > 9){
-                        data ="0"+ dayOfMonth + "/" + (month+1) + "/" + year;
-                    }
-                if (i == 1){
-                    campoDataEncontrado.setText(data);
-                }else if(i == 2){
-                    campoDataNascimento.setText(data);
-                }
-            }
-        }, dia, mes, ano);
-        datePickerDialog.getDatePicker().updateDate(ano, mes,dia);
-        datePickerDialog.show();
+        return data;
     }
 }

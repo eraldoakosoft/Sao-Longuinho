@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -13,7 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,21 +22,22 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.saolonguinho.R;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.helper.Base64Custon;
 import com.example.saolonguinho.helper.Permissoes;
 import com.example.saolonguinho.model.Cartao;
+import com.example.saolonguinho.model.Usuario;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
     private Spinner spinnerAC;
 
     //PEGAR INSTANCIA DO FIREBASE
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Cartoes1");
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Modelo");
     //INSTACIAR A CLASSE CARTÃO
     private Cartao cartao;
     //PEGAR INISTACIA DO FIREBASE AUTH
@@ -76,6 +75,9 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
             Manifest.permission.CAMERA
 
     };
+
+    //OBJETO USUARIO PARA RECEBER DADOS DO BANCO
+    private Usuario usuarioDados;
 
 
     //CONFIGURAÇÃO PARA O CALENDARIO
@@ -119,21 +121,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
                 datePickerDialog = new android.app.DatePickerDialog(AcheiCartaoActivity.this, new android.app.DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String data = "00-00-0000";
-                        if ((month+1) < 10 ){
-                             data = dayOfMonth + "/0" + (month+1) + "/" + year;
-                             if(dayOfMonth <= 9){
-                                 data ="0"+ dayOfMonth + "/0" + (month+1) + "/" + year;
-                             }
-                        }else{
-                            if(dayOfMonth <= 9){
-                                data ="0"+ dayOfMonth + "/" + (month+1) + "/" + year;
-                            }
-                             data = dayOfMonth + "/" + (month+1) + "/" + year;
-                        }
-
-
-                        campoDataAchou.setText(data);
+                        campoDataAchou.setText(formatarData(dayOfMonth, month, year));
                     }
                 }, dia, mes, ano);
                 datePickerDialog.getDatePicker().updateDate(ano, mes,dia);
@@ -179,9 +167,12 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         cartao.setDigitos(campo4Digitos.getText().toString());
         cartao.setNome(campoNome.getText().toString().toUpperCase());
         cartao.setDataEncontrado(campoDataAchou.getText().toString());
-        cartao.setIdPessoaachou(idUsuario);
+        cartao.setIdLonguinho(idUsuario);
         cartao.setDescricao(campoDescricao.getText().toString());
         cartao.setTipo(spinnerAC.getSelectedItem().toString());
+        cartao.setUltimaAtualizacao(getDateTime());
+        cartao.setNomeLonguinho("null");
+
 
         reference.push().setValue(cartao);
         Toast.makeText(AcheiCartaoActivity.this, "Salvo com Sucesso!", Toast.LENGTH_SHORT).show();
@@ -280,6 +271,20 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
+    }
+
+
+    public String formatarData(int dia, int mes, int ano){
+        String data = "00/00/0000";
+        if ( (mes+1) < 10 && dia < 10 ){
+            data = "0" + dia + "/0" + (mes+1) + "/" + ano;
+        }else if( (mes+1) < 10 ){
+            data = dia + "/0" + (mes+1) + "/" + ano;
+        }else if( dia < 10 ){
+            data = "0" + dia + "/" + (mes+1) + "/" + ano;
+        }
+
+        return data;
     }
 }
 

@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
         //CONFIGURAR O FIREBASE
         final DatabaseReference usuarios = reference.child("Usuarioss");
         DatabaseReference usuarioss = usuarios.child(idUsuario);
-        //System.out.println("|||||||--------> "+idUsuario);
         usuarioss.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

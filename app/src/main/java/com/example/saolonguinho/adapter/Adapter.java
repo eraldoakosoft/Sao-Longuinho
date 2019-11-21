@@ -35,7 +35,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
         Cartao cartao = listaCartao.get(position);
         holder.tipo.setText(cartao.getTipo());
-        holder.nomeAchou.setText(cartao.getIdPessoaachou());
+        holder.nomeAchou.setText(cartao.getNomeLonguinho());
         holder.nome.setText(cartao.getNome());
         holder.dataPublicacao.setText(cartao.getDataInseridoNoBanco());
         holder.dataEncontrado.setText(cartao.getDataEncontrado());

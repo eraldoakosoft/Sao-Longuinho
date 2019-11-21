@@ -1,29 +1,28 @@
 package com.example.saolonguinho.model;
 
-public class Documento {
-    private String nome;
+import com.example.saolonguinho.config.ConfiguracaoFirebase;
+import com.google.firebase.database.DatabaseReference;
+
+public class Documento  extends Modelo{
+    private String idDocumento;
     private String cpf;
     private String rg;
     private String naturalidade;
     private String nomeMae;
-    private String idQuemAchou;
     private String dataNascimento;
-    private String dataCadastroNoBanco;
-    private String dataAchado;
-    private String dataSaida;
-    private boolean status;
 
     public Documento() {
-        this.dataSaida = "00-00-0000";
-        this.status = true;
+        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebase().child("Modelo");
+        setIdDocumento( databaseReference.push().getKey() );
     }
 
-    public String getNome() {
-        return nome;
+
+    public String getIdDocumento() {
+        return idDocumento;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setIdDocumento(String idDocumento) {
+        this.idDocumento = idDocumento;
     }
 
     public String getCpf() {
@@ -58,14 +57,6 @@ public class Documento {
         this.nomeMae = nomeMae;
     }
 
-    public String getIdQuemAchou() {
-        return idQuemAchou;
-    }
-
-    public void setIdQuemAchou(String idQuemAchou) {
-        this.idQuemAchou = idQuemAchou;
-    }
-
     public String getDataNascimento() {
         return dataNascimento;
     }
@@ -73,38 +64,4 @@ public class Documento {
     public void setDataNascimento(String dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
-
-    public String getDataCadastroNoBanco() {
-        return dataCadastroNoBanco;
-    }
-
-    public void setDataCadastroNoBanco(String dataCadastroNoBanco) {
-        this.dataCadastroNoBanco = dataCadastroNoBanco;
-    }
-
-    public String getDataAchado() {
-        return dataAchado;
-    }
-
-    public void setDataAchado(String dataAchado) {
-        this.dataAchado = dataAchado;
-    }
-
-    public String getDataSaida() {
-        return dataSaida;
-    }
-
-    public void setDataSaida(String dataSaida) {
-        this.dataSaida = dataSaida;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-
 }

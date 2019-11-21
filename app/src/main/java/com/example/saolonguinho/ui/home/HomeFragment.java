@@ -16,8 +16,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.saolonguinho.MainActivity;
 import com.example.saolonguinho.R;
 import com.example.saolonguinho.adapter.Adapter;
+import com.example.saolonguinho.adapter.AdapterCard;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.model.Cartao;
 import com.example.saolonguinho.model.Documento;
@@ -31,6 +33,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -38,72 +41,47 @@ public class HomeFragment extends Fragment {
     //CRIANDO ATRIBUTO PARA RECICLEVIEW
     private RecyclerView recyclerView;
     private List<Cartao> listaCartao = new ArrayList<>();
+    private AdapterCard adapterCard;
 
 
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Cartoes1");
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Modelo");
 
     private HomeViewModel homeViewModel;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         //FAZENDO REFERENCIA PARA O FRAGMENTO
         recyclerView = root.findViewById(R.id.recyclerHome);
-        buscarDados();
+
+        recuperarCartoes();
+
+
+        //CONFIGURAR RECYCLER VIEW
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        recyclerView.setHasFixedSize(true);
+        //recyclerView.
+        adapterCard = new AdapterCard(listaCartao, this.getContext());
+        recyclerView.setAdapter(adapterCard);
 
         return root;
     }
 
 
-
-    //RECUPERAR DADOS DO FIREBASE
-    public void buscarDados(){
-
-        DatabaseReference cartoes = reference;
-
-        Query cartoesPesquisa = reference.orderByChild("status").equalTo(true);
-
-        cartoesPesquisa.addChildEventListener(new ChildEventListener() {
+    private void recuperarCartoes(){
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Cartao cartao = dataSnapshot.getValue(Cartao.class);
-                listaCartao.add(cartao);
-                //CONFIGURAR O ADAPTER
-                Adapter adapter = new Adapter( listaCartao );
-                //CONFIGURAR RECYCLEVIEW
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
-                recyclerView.setAdapter( adapter );
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listaCartao.clear();
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    listaCartao.add(ds.getValue(Cartao.class));
+                    //System.out.println("--------------------------------");
 
-            }
+                }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Cartao cartao = dataSnapshot.getValue(Cartao.class);
-                listaCartao.add(cartao);
-                //CONFIGURAR O ADAPTER
-                Adapter adapter = new Adapter( listaCartao );
-                //CONFIGURAR RECYCLEVIEW
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
-                recyclerView.setAdapter( adapter );
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Collections.reverse(listaCartao);
+                adapterCard.notifyDataSetChanged();
 
             }
 
@@ -111,11 +89,7 @@ public class HomeFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-
         });
-
-
-
     }
 
 }
