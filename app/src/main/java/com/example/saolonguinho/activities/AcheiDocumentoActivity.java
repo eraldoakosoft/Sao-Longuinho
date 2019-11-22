@@ -21,6 +21,8 @@ import com.example.saolonguinho.R;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.helper.Base64Custon;
 import com.example.saolonguinho.model.Documento;
+import com.github.rtoshiro.util.format.SimpleMaskFormatter;
+import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -67,6 +69,12 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         campoNomeMae = findViewById(R.id.editTextDocNomeMae);
         campoRG = findViewById(R.id.editTextDocRg);
         btnAdicionar = findViewById(R.id.buttonDocAdicionar);
+
+        //criando a mascara para campo cpf
+        SimpleMaskFormatter smf = new SimpleMaskFormatter("NNN.NNN.NNN-NN");
+        MaskTextWatcher mtw = new MaskTextWatcher(campoCPF, smf);
+        campoCPF.addTextChangedListener(mtw);
+        //fim da mascara
 
         campoDataEncontrado.setOnClickListener(new View.OnClickListener() {
             @Override
