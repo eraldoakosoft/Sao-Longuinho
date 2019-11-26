@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import com.example.saolonguinho.MainActivity;
 import com.example.saolonguinho.R;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
+import com.example.saolonguinho.helper.DadosDeUsuarios;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashActivity extends AppCompatActivity {

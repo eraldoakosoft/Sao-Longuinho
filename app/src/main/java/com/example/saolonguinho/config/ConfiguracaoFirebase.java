@@ -9,6 +9,7 @@ import com.google.firebase.storage.StorageReference;
 public class ConfiguracaoFirebase {
     private static FirebaseAuth autenticacao;
     private static DatabaseReference firebase;
+    private static StorageReference storage;
 
 
     //RETORNA A INSTANCIA DO FIREBASEDATABASE
@@ -20,13 +21,23 @@ public class ConfiguracaoFirebase {
     }
 
 
-
     //RETORNA A INSTANCIA FAREBASE
     public static FirebaseAuth getFirebaseAutenticacao(){
         if (autenticacao == null){
             autenticacao = FirebaseAuth.getInstance();
         }
         return autenticacao;
+    }
+
+    public static StorageReference getFirebaseStorage(){
+
+
+        if( storage == null ){
+            storage = FirebaseStorage.getInstance().getReference();
+        }
+
+        return storage;
+
     }
 
 }

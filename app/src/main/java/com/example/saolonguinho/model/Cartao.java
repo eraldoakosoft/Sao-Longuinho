@@ -3,22 +3,16 @@ package com.example.saolonguinho.model;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.google.firebase.database.DatabaseReference;
 
-import java.util.List;
-
 public class Cartao extends Modelo {
     //INSTITUIÇÃO EMISSORA DO CARTÃO
     private String bancoEmissor;
     //ULTIMOS 4 DIGITOS DO CARTÃO
     private String digitos;
-    //IDENTIFICADOR UNICO PARA O CARTÃO
-    private String idCartao;
 
 
-    private List<String> fotos;
-
-    public Cartao() {
-        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebase().child("Modelo");
-        setIdCartao(databaseReference.push().getKey());
+    public void salvar(){
+        DatabaseReference reference = ConfiguracaoFirebase.getFirebase().child("Itens");
+        reference.push().setValue(this);
     }
 
     public String getBancoEmissor() {
@@ -37,11 +31,4 @@ public class Cartao extends Modelo {
         this.digitos = digitos;
     }
 
-    public String getIdCartao() {
-        return idCartao;
-    }
-
-    public void setIdCartao(String idCartao) {
-        this.idCartao = idCartao;
-    }
 }
