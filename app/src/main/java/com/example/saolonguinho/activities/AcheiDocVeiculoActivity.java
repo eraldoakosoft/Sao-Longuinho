@@ -38,7 +38,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
     private Spinner spinnerAVei;
 
     //INSTACIA DO FIREBASE
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Modelo");
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Item");
 
     //INSTANCIA PARA AUTENTICAÇÃO DO FIREBASE
     FirebaseAuth firebaseAuth;

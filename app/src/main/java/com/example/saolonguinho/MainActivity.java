@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         //PEGAR O USUARIO PARA SABER QUEM ESTA ADICIONANDO AO BANCO,
         firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
 
-        //STRING ONDE VAI SER SLAVO O EMAIL DA PESSOA QUE ESTA ADICIONANDO AO FOREBASE
+        //STRING ONDE VAI SER SALVO O EMAIL DA PESSOA QUE ESTA ADICIONANDO AO FOREBASE
         String idUsuario = Base64Custon.codificarBase64( firebaseAuth.getCurrentUser().getEmail());
         //CONFIGURAR O FIREBASE
         final DatabaseReference usuarios = reference.child("Usuarioss");

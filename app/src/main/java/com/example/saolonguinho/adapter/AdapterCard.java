@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.saolonguinho.R;
 import com.example.saolonguinho.model.Cartao;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -41,6 +42,13 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.MyViewHolder> 
         holder.dataPublicacao.setText(cartao.getDataInseridoNoBanco());
         holder.dataEncontrado.setText(cartao.getDataEncontrado());
         holder.tipo.setText(cartao.getTipo());
+
+        //PEGAR A PRIMEIRA IMAGEM DA LISTA
+        List<String> urlFotos = cartao.getFotos();
+        String urlCapa = urlFotos.get(0);
+
+        Picasso.get().load(urlCapa).into(holder.foto);
+
 
     }
 

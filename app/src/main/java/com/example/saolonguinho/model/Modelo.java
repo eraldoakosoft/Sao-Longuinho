@@ -1,6 +1,12 @@
 package com.example.saolonguinho.model;
 
+import com.example.saolonguinho.config.ConfiguracaoFirebase;
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.List;
+
 public class Modelo {
+    private String idItem;
     private String nome;
     private String tipo;
     private Boolean status;
@@ -11,6 +17,23 @@ public class Modelo {
     private String dataEncontrado;
     private String descricao;
     private String ultimaAtualizacao;
+    private List<String> fotos;
+
+    public String getIdItem() {
+        return idItem;
+    }
+
+    public void setIdItem(String idItem) {
+        this.idItem = idItem;
+    }
+
+    public List<String> getFotos() {
+        return fotos;
+    }
+
+    public void setFotos(List<String> fotos) {
+        this.fotos = fotos;
+    }
 
     public Boolean getStatus() {
         return status;
@@ -29,6 +52,8 @@ public class Modelo {
     }
 
     public Modelo() {
+        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebase().child("Item");
+        setIdItem(databaseReference.push().getKey());
         this.status = true;
         this.dataSaida = "00/00/0000";
     }

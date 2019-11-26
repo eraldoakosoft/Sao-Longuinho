@@ -1,16 +1,20 @@
 package com.example.saolonguinho.activities;
 
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -28,22 +32,24 @@ import com.example.saolonguinho.helper.Base64Custon;
 import com.example.saolonguinho.helper.Permissoes;
 import com.example.saolonguinho.model.Cartao;
 import com.example.saolonguinho.model.Usuario;
+
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import dmax.dialog.SpotsDialog;
 
 
 public class AcheiCartaoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
@@ -53,36 +59,30 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
     private Button btnAdicionar;
     private ImageView imagem1, imagem2;
     private List<String> listaFotosRecuperadas = new ArrayList<>();
+    private List<String> listaURLFotos = new ArrayList<>();
 
     //RECUPERAR O OBJETO STORAGE
     private StorageReference storageReference;
-
+    private AlertDialog alertDialog;
 
     //SPINNER
     private Spinner spinnerAC;
 
     //PEGAR INSTANCIA DO FIREBASE
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Modelo");
-    //INSTACIAR A CLASSE CARTÃO
-    private Cartao cartao;
+    //private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Item");
+
     //PEGAR INISTACIA DO FIREBASE AUTH
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth  = ConfiguracaoFirebase.getFirebaseAutenticacao();
 
-    private int year, month, day, hour, minute;
-
-    private String[] permissoes = new String[]{
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA
-
-    };
-
-    //OBJETO USUARIO PARA RECEBER DADOS DO BANCO
-    private Usuario usuarioDados;
+    private String[] permissoes = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA };
 
 
     //CONFIGURAÇÃO PARA O CALENDARIO
     Calendar calendar;
     android.app.DatePickerDialog datePickerDialog;
+
+    //
+    Cartao cartao = new Cartao();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,10 +90,10 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         setContentView(R.layout.activity_achei_cartao);
         getSupportActionBar().hide();
 
-        Permissoes.validarPermissoes(permissoes,this,1);
-
         //CONFIGURAÇÕES INICIAIS
-        storageReference = FirebaseStorage.getInstance().getReference();
+        storageReference = ConfiguracaoFirebase.getFirebaseStorage();
+
+        Permissoes.validarPermissoes(permissoes,this,1);
 
         //PASANDO DADOS PARA AS VARIAVEIS LOCAIS
         imagem1 = findViewById(R.id.imageViewCarImagem1);
@@ -108,6 +108,8 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         campoDescricao = findViewById(R.id.editTextCarDescricao);
         btnAdicionar = findViewById(R.id.buttonCarAdicionar);
 
+
+
         campoDataAchou.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,27 +118,19 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
                 int dia = calendar.get(Calendar.DAY_OF_MONTH);
                 int mes = calendar.get(Calendar.MONTH);
                 int ano = calendar.get(Calendar.YEAR);
-
-
                 datePickerDialog = new android.app.DatePickerDialog(AcheiCartaoActivity.this, new android.app.DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        campoDataAchou.setText(formatarData(dayOfMonth, month, year));
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) { campoDataAchou.setText(formatarData(dayOfMonth, month, year));
                     }
                 }, dia, mes, ano);
                 datePickerDialog.getDatePicker().updateDate(ano, mes,dia);
-
                 datePickerDialog.show();
-
-
-
             }
         });
-
         btnAdicionar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                salvar();
+                validarDados();
             }
         });
 
@@ -151,32 +145,87 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
 
 
     //METODO PARA SALVAR
-    public void salvar(){
-        //salvarFotoStorage();
-        //INSTACIAR UM NOVO OBJETO CARTAO
-        cartao = new Cartao();
+    public void salvarCartao(){
 
-        //PEGAR O USUARIO PARA SABER QUEM ESTA ADICIONANDO AO BANCO,
-        firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
-        //STRING ONDE VAI SER SLAVO O EMAIL DA PESSOA QUE ESTA ADICIONANDO AO FOREBASE
-        String idUsuario = Base64Custon.codificarBase64( firebaseAuth.getCurrentUser().getEmail());
+        alertDialog = new SpotsDialog.Builder()
+                .setContext(AcheiCartaoActivity.this)
+                .setMessage("Salvando").build();
+        alertDialog.show();
 
-        //PASSAR OS DADOS PARA O OBJETO CARTAO
-        cartao.setBancoEmissor(campoBanco.getText().toString());
-        cartao.setDataInseridoNoBanco(getDateTime());
-        cartao.setDigitos(campo4Digitos.getText().toString());
-        cartao.setNome(campoNome.getText().toString().toUpperCase());
-        cartao.setDataEncontrado(campoDataAchou.getText().toString());
-        cartao.setIdLonguinho(idUsuario);
-        cartao.setDescricao(campoDescricao.getText().toString());
-        cartao.setTipo(spinnerAC.getSelectedItem().toString());
-        cartao.setUltimaAtualizacao(getDateTime());
-        cartao.setNomeLonguinho("null");
+        /**SALVAR IMAGEM NO STORAGE*/
+        for( int i = 0; i < listaFotosRecuperadas.size(); i++ ){
+            String urlImagem = listaFotosRecuperadas.get(i);
+            int tamanhoLista = listaFotosRecuperadas.size();
+            salvarFotoStorage(urlImagem, tamanhoLista, i);
+        }
+
+        //Toast.makeText(AcheiCartaoActivity.this, "Salvo com Sucesso!", Toast.LENGTH_SHORT).show();
+
+    }
 
 
-        reference.push().setValue(cartao);
-        Toast.makeText(AcheiCartaoActivity.this, "Salvo com Sucesso!", Toast.LENGTH_SHORT).show();
-        finish();
+
+
+    /**CONFIGURAR O CARTÃO*/
+    private void configurarCartao(){
+        String nome = campoNome.getText().toString().toUpperCase();
+        String banco = campoBanco.getText().toString();
+        String digitos = campo4Digitos.getText().toString();
+        String dataEncontrado = campoDataAchou.getText().toString();
+        String comentario = campoDescricao.getText().toString();
+        String tipo = spinnerAC.getSelectedItem().toString();
+        String idLonguinho = Base64Custon.codificarBase64( firebaseAuth.getCurrentUser().getEmail());
+        String ultimaAtualizacao = getDateTime();
+        String dataInseridoNoBanco = getDateTime();
+        cartao.setNome(nome);
+        cartao.setBancoEmissor(banco);
+        cartao.setDigitos(digitos);
+        cartao.setDataEncontrado(dataEncontrado);
+        cartao.setDescricao(comentario);
+        cartao.setTipo(tipo);
+        cartao.setDataInseridoNoBanco(dataInseridoNoBanco);
+        cartao.setIdLonguinho(idLonguinho);
+        cartao.setUltimaAtualizacao(ultimaAtualizacao);
+
+      }
+
+
+    /**VALIDAR CAMPOS*/
+    public void validarDados(){
+        String nome = campoNome.getText().toString().toUpperCase();
+        String banco = campoBanco.getText().toString();
+        String digitos = campo4Digitos.getText().toString();
+        String dataEncontrado = campoDataAchou.getText().toString();
+        String comentario = campoDescricao.getText().toString();
+
+        if( listaFotosRecuperadas.size() != 0 ){
+            if( !nome.isEmpty() ){
+                if( !banco.isEmpty() ){
+                    if( !digitos.isEmpty() ){
+                        if( !dataEncontrado.isEmpty() ){
+                            if( !comentario.isEmpty() ){
+                                configurarCartao();
+                                salvarCartao();
+
+                            }else {
+                                exibirMensagemDeErro("Preencha o Comentario!");
+                            }
+                        }else {
+                            exibirMensagemDeErro("Preencha a Data Encontrado!");
+                        }
+                    }else {
+                        exibirMensagemDeErro("Preencha os Ultimos Digitos!");
+                    }
+                }else {
+                    exibirMensagemDeErro("Preencha o Banco/Emissor");
+                }
+            }else {
+                exibirMensagemDeErro("Preencha o Nome!");
+            }
+        }else {
+            exibirMensagemDeErro("Selecione uma foto!");
+        }
+
     }
 
 
@@ -227,21 +276,18 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
     public void escolherImagem(int requestCode){
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i,requestCode);
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("************************* FORA: ");
+
 
         //if( requestCode == Activity.RESULT_OK){
 
             //RECUPERAR IMAGEM
             Uri imagemSelecionada = data.getData();
             String caminhoImagem = imagemSelecionada.toString();
-            System.out.println("*************************");
-            System.out.println("Caminho " + caminhoImagem);
 
             if( requestCode == 1 ){
                 imagem1.setImageURI(imagemSelecionada);
@@ -249,30 +295,46 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
                 imagem2.setImageURI(imagemSelecionada);
 
             }
-            listaFotosRecuperadas.add(caminhoImagem);
+            listaFotosRecuperadas.add( caminhoImagem );
 
        // }
     }
 
 
-    /**
-     * METODO PARA SALVAR FOTOS NO FIREBASE
-     * */
-    public void salvarFotoStorage(String url, int totalFotos, int contador){
+    /** METODO PARA SALVAR FOTOS NO FIREBASE*/
+    public void salvarFotoStorage(String urlString, final int totalFotos, int contador){
 
-        //CRIAR A REFERENCIA STORAGE
-        StorageReference imagem = storageReference.child("imagens").child(cartao.getIdCartao()).child("imagem"+contador);
+        //CRIAR NÓ NO FIREBASE
+        StorageReference imagem = storageReference.child("imagens").child(cartao.getIdItem()).child("imagem"+contador);
 
-        UploadTask uploadTask = imagem.putFile(Uri.parse(url));
+        /*FAZER UPLOAD DO DAS FOTOS*/
+        UploadTask uploadTask = imagem.putFile(Uri.parse(urlString));
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> firebaseUrl = taskSnapshot.getStorage().getDownloadUrl();
+                while (!firebaseUrl.isComplete());
+                Uri firebase = firebaseUrl.getResult();
+                String urlConvertida = firebase.toString();
+                listaURLFotos.add( urlConvertida );
 
+                if ( totalFotos == listaURLFotos.size() ){
+                    cartao.setFotos(listaURLFotos);
+                    cartao.salvar();
+                    alertDialog.dismiss();
+                    finish();
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                exibirMensagemDeErro("FALHA AO FAZER UPLOAD!");
+                System.out.println("FIREBASE : FALHA AO SALVAR IMAGEM !! ");
             }
         });
 
     }
-
 
     public String formatarData(int dia, int mes, int ano){
         String data = "00/00/0000";
@@ -287,6 +349,11 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         }
 
         return data;
+    }
+
+    /**METODO PARA MOSTRAR MENSAGENS DE ERRO*/
+    public void exibirMensagemDeErro(String msm){
+        Toast.makeText(AcheiCartaoActivity.this, msm, Toast.LENGTH_SHORT).show();
     }
 }
 

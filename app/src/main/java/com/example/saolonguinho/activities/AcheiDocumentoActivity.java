@@ -40,7 +40,7 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
     private Button btnAdicionar;
 
     //PEGAR INSTANCIA DO FIREBASE
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Modelo");
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Item");
 
 
     //INSTACIAR A CLASSE DOCUMENTO

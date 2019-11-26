@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
     private AdapterCard adapterCard;
 
 
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Modelo");
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Itens");
 
     private HomeViewModel homeViewModel;
 
