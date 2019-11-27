@@ -31,14 +31,11 @@ import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.helper.Base64Custon;
 import com.example.saolonguinho.helper.Permissoes;
 import com.example.saolonguinho.model.Cartao;
-import com.example.saolonguinho.model.Usuario;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -55,7 +52,8 @@ import dmax.dialog.SpotsDialog;
 public class AcheiCartaoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     //VARIAVEIS LOCAIS PARA RECEBER DADOS DA ACTIVITY
-    private EditText campoNome, campo4Digitos, campoBanco, campoDataAchou, campoDescricao;
+    private EditText campoNome, campo4Digitos, campoBanco, campoDescricao;
+    private TextView campoDataAchou;
     private Button btnAdicionar;
     private ImageView imagem1, imagem2;
     private List<String> listaFotosRecuperadas = new ArrayList<>();
@@ -104,7 +102,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         campo4Digitos = findViewById(R.id.editTextCar4Digitos);
         campoBanco = findViewById(R.id.editTextCarBanco);
         campoNome = findViewById(R.id.editTextCarNome);
-        campoDataAchou = findViewById(R.id.editTextCarDataAchou);
+        campoDataAchou = findViewById(R.id.textViewCarDataEncontrado1);
         campoDescricao = findViewById(R.id.editTextCarDescricao);
         btnAdicionar = findViewById(R.id.buttonCarAdicionar);
 
@@ -113,7 +111,6 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         campoDataAchou.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideSoftKeyboard();
                 calendar = Calendar.getInstance();
                 int dia = calendar.get(Calendar.DAY_OF_MONTH);
                 int mes = calendar.get(Calendar.MONTH);
@@ -127,6 +124,8 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
                 datePickerDialog.show();
             }
         });
+
+
         btnAdicionar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,9 +157,6 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
             int tamanhoLista = listaFotosRecuperadas.size();
             salvarFotoStorage(urlImagem, tamanhoLista, i);
         }
-
-        //Toast.makeText(AcheiCartaoActivity.this, "Salvo com Sucesso!", Toast.LENGTH_SHORT).show();
-
     }
 
 
@@ -249,16 +245,6 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
 
     }
 
-    /**
-     * Esconda o teclado
-     */
-    public void hideSoftKeyboard() {
-        if(getCurrentFocus()!=null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -330,14 +316,14 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void onFailure(@NonNull Exception e) {
                 exibirMensagemDeErro("FALHA AO FAZER UPLOAD!");
-                System.out.println("FIREBASE : FALHA AO SALVAR IMAGEM !! ");
+                //System.out.println("FIREBASE : FALHA AO SALVAR IMAGEM !! ");
             }
         });
 
     }
 
     public String formatarData(int dia, int mes, int ano){
-        String data = "00/00/0000";
+        String data;
         if ( (mes+1) < 10 && dia < 10 ){
             data = "0" + dia + "/0" + (mes+1) + "/" + ano;
         }else if( (mes+1) < 10 ){
@@ -347,7 +333,6 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         }else {
             data = dia + "/" + (mes+1) + "/" + ano;
         }
-
         return data;
     }
 
