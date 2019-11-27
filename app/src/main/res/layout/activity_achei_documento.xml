@@ -78,114 +78,57 @@
 
                 <EditText
                     android:id="@+id/editTextDocNomeCompleto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
                     android:inputType="textPersonName"
                     android:hint="@string/nome_completo"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    style="@style/caixadetexto"
                    />
 
                 <EditText
                     android:id="@+id/editTextDocCpf"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="number"
                     android:hint="@string/cpf"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"/>
+                    style="@style/caixadetexto"
+                    />
 
                 <EditText
                     android:id="@+id/editTextDocRg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="number"
                     android:hint="@string/rg"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"/>
+                    style="@style/caixadetexto"
+                   />
 
-                <EditText
-                    android:id="@+id/editTextDocDataNascimento"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
+                <TextView
+                    android:id="@+id/textViewDocDataNascimento"
                     android:inputType="date"
                     android:hint="@string/data_nascimento"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"/>
+                    style="@style/textview"
+                    />
 
                 <EditText
                     android:id="@+id/editTextDocNomeMae"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="textPersonName"
                     android:hint="@string/nome_da_mae"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"/>
+                    style="@style/caixadetexto"
+                    />
 
                 <EditText
                     android:id="@+id/editTextDocNaturalidade"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="textPersonName"
-                    android:hint="Naturalidade"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"/>
+                    android:hint="@string/naturalidade"
+                    style="@style/caixadetexto"
+                    />
 
-                <EditText
-                    android:id="@+id/editTextDocDataEncontrado"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="date"
-                    android:hint="Data Que Você Encontrou"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"/>
+                <TextView
+                    android:id="@+id/textViewDocDataEncontrado"
+                    android:text="@string/data_que_voce_encontrou"
+                    style="@style/textview"
+                    />
 
                 <EditText
                     android:id="@+id/editTextDocDescricao"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="text"
                     android:hint="@string/descri_o"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
+                    style="@style/caixadetexto"
                     />
 
                 <LinearLayout
