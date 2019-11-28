@@ -1,10 +1,18 @@
 package com.example.saolonguinho.activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Camera;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -13,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,36 +29,57 @@ import android.widget.Toast;
 import com.example.saolonguinho.R;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.helper.Base64Custon;
+import com.example.saolonguinho.helper.Permissoes;
 import com.example.saolonguinho.model.Documento;
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
+
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import dmax.dialog.SpotsDialog;
 
 public class AcheiDocumentoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener{
 
     //VARIAVEIS LOCAIS PARA RECEBER O QUE VEM DA TELA
-    private EditText campoNome, campoCPF, campoRG;
-    private EditText campoNomeMae, campoNaturalidade;
+    private EditText campoNome, campoCPF, campoRG, campoComentario;
+    private EditText campoNomeMae;
     private TextView campoDataEncontrado, campoDataNascimento;
     private Button btnAdicionar;
+    private ImageView imagem1, imagem2;
+    private List<String> listaFotosRecuperadas = new ArrayList<>();
+    private List<String> listaUrlFotos = new ArrayList<>();
+
+    //RECUPERAR O OBJETO STORAGE
+    private StorageReference storageReference;
+    private AlertDialog alertDialog;
 
     //PEGAR INSTANCIA DO FIREBASE
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Item");
 
 
     //INSTACIAR A CLASSE DOCUMENTO
-    private Documento documento;
+    private Documento documento = new Documento();
     //PEGAR INISTACIA DO FIREBASE AUTH
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
 
     private Spinner spinnerADoc;
+
+    private String[] permissoes = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
     //CONFIGURAÇÃO PARA O CALENDARIO
     Calendar calendar;
@@ -61,15 +91,27 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         setContentView(R.layout.activity_achei_documento);
         getSupportActionBar().hide();
 
+
+        /**CONFIGURACOES INICIAIS*/
+        storageReference = ConfiguracaoFirebase.getFirebaseStorage();
+
+        Permissoes.validarPermissoes(permissoes,this,1);
+
         //PASSANDO DADOS DA ACTIVITY PARA AS VARIAVEIS LOCAIS
         campoCPF = findViewById(R.id.editTextDocCpf);
         campoDataEncontrado = findViewById(R.id.textViewDocDataEncontrado);
         campoDataNascimento = findViewById(R.id.textViewDocDataNascimento);
-        campoNaturalidade = findViewById(R.id.editTextDocNaturalidade);
         campoNome = findViewById(R.id.editTextDocNomeCompleto);
         campoNomeMae = findViewById(R.id.editTextDocNomeMae);
         campoRG = findViewById(R.id.editTextDocRg);
+        campoComentario = findViewById(R.id.editTextDocComentario);
         btnAdicionar = findViewById(R.id.buttonDocAdicionar);
+
+
+        imagem1 = findViewById(R.id.imageViewDocImagem1);
+        imagem2 = findViewById(R.id.imageViewDocImagem2);
+        imagem1.setOnClickListener(this);
+        imagem2.setOnClickListener(this);
 
         //criando a mascara para campo cpf
         SimpleMaskFormatter smf = new SimpleMaskFormatter("NNN.NNN.NNN-NN");
@@ -80,7 +122,7 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         campoDataEncontrado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideSoftKeyboard();
+                esconderTeclado();
                 calendar = Calendar.getInstance();
                 int dia = calendar.get(Calendar.DAY_OF_MONTH);
                 int mes = calendar.get(Calendar.MONTH);
@@ -102,7 +144,7 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         campoDataNascimento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideSoftKeyboard();
+                esconderTeclado();
                 calendar = Calendar.getInstance();
                 int dia = calendar.get(Calendar.DAY_OF_MONTH);
                 int mes = calendar.get(Calendar.MONTH);
@@ -135,7 +177,8 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         btnAdicionar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                salvar();
+                configurarDocumento();
+                salvarDocumento();
             }
         });
 
@@ -143,6 +186,7 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
     }
 
 
+    /*
     //METODO PARA SALVAR
     public void salvar(){
         //INSTACIANDO UM NOVO OBJETO DOCUMENTO
@@ -157,7 +201,6 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         documento.setCpf(campoCPF.getText().toString());
         documento.setDataEncontrado(campoDataEncontrado.getText().toString());
         documento.setDataNascimento(campoDataNascimento.getText().toString());
-        documento.setNaturalidade(campoNaturalidade.getText().toString());
         documento.setRg(campoRG.getText().toString());
         documento.setNomeMae(campoNomeMae.getText().toString());
         documento.setNome(campoNome.getText().toString());
@@ -167,12 +210,13 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         documento.setTipo(spinnerADoc.getSelectedItem().toString());
 
         //MANDANDO PARA O FIREBASE
-        reference.push().setValue(documento);
-        Toast.makeText(AcheiDocumentoActivity.this, "Salvo com Sucesso!", Toast.LENGTH_SHORT).show();
-        finish();
+        //reference.push().setValue(documento);
+        //Toast.makeText(AcheiDocumentoActivity.this, "Salvo com Sucesso!", Toast.LENGTH_SHORT).show();
+        //finish();
 
 
     }
+     */
 
     //METODO PARA PEGAR DATA E HORA DO SISTEMA
     private String getDateTime() {
@@ -195,18 +239,19 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
 
     @Override
     public void onClick(View v) {
-
-    }
-
-    /**
-     * Esconda o teclado
-     */
-    public void hideSoftKeyboard() {
-        if(getCurrentFocus()!=null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        switch ( v.getId() ){
+            case R.id.imageViewDocImagem1 :
+                esconderTeclado();
+                escolherImagem(1);
+                break;
+            case R.id.imageViewDocImagem2 :
+                esconderTeclado();
+                escolherImagem(2);
+                break;
         }
+
     }
+
 
 
     public String formatarData(int dia, int mes, int ano){
@@ -222,5 +267,112 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         }
 
         return data;
+    }
+
+
+    public void salvarFotoStorage(String urlString, final int totalFotos, int contador){
+        //CRIAR NÓ NO FIREBASE
+        StorageReference imagem = storageReference.child("imagens").child(documento.getIdItem()).child("imagem"+contador);
+
+        /**FAZER UPLOAD DAS FOTOS*/
+        UploadTask uploadTask = imagem.putFile(Uri.parse(urlString));
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> firebaseUrl = taskSnapshot.getStorage().getDownloadUrl();
+                while (!firebaseUrl.isComplete());
+                Uri firebase = firebaseUrl.getResult();
+                String urlConvertida = firebase.toString();
+                listaUrlFotos.add( urlConvertida );
+
+                if( totalFotos == listaUrlFotos.size() ){
+                    documento.setFotos( listaUrlFotos );
+                    documento.salvar();
+                    alertDialog.dismiss();
+                    finish();
+                }
+
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                exibirMensagemDeErro("FALHAR AO FAZER UPLOAD!");
+            }
+        });
+    }
+
+    /**ESCOLHER IMAGEM*/
+    public void escolherImagem(int requestCode){
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, requestCode);
+    }
+
+    /**CONFIGURAR DOCUMETNO*/
+    private void configurarDocumento(){
+        String nome = campoNome.getText().toString();
+        String cpf = campoCPF.getText().toString();
+        String rg = campoRG.getText().toString();
+        String dataNascimento = campoDataNascimento.getText().toString();
+        String nomeMae = campoNomeMae.getText().toString();
+        String dataEncontrado = campoDataEncontrado.getText().toString();
+        String comentario = campoComentario.getText().toString();
+        String tipo = spinnerADoc.getSelectedItem().toString();
+        String idLonguinho = Base64Custon.codificarBase64(firebaseAuth.getCurrentUser().getEmail());
+        String ultimaAtualizacao = getDateTime();
+        String dataInseridoNoBanco = getDateTime();
+        documento.setNome(nome);
+        documento.setCpf(cpf);
+        documento.setRg(rg);
+        documento.setDataNascimento(dataNascimento);
+        documento.setNomeMae(nomeMae);
+        documento.setDataEncontrado(dataEncontrado);
+        documento.setComentario(comentario);
+        documento.setTipo(tipo);
+        documento.setIdLonguinho(idLonguinho);
+        documento.setUltimaAtualizacao(ultimaAtualizacao);
+        documento.setDataInseridoNoBanco(dataInseridoNoBanco);
+    }
+
+    /**EXIBIR MENSAGEM DE ERRO*/
+    public void exibirMensagemDeErro(String erro){
+        Toast.makeText(AcheiDocumentoActivity.this, erro, Toast.LENGTH_SHORT).show();
+    }
+
+    /**SALVAR DOCUMENTO*/
+    public void salvarDocumento(){
+        alertDialog = new SpotsDialog.Builder().setContext(AcheiDocumentoActivity.this).setMessage("Salvando").build();
+        alertDialog.show();
+
+        /**SALVAR IMAGEM NO STORAGE*/
+        for( int i = 0; i < listaFotosRecuperadas.size();i++){
+            String urlImagem = listaFotosRecuperadas.get(i);
+            int tamanhoLista = listaFotosRecuperadas.size();
+            salvarFotoStorage(urlImagem, tamanhoLista, i);
+        }
+    }
+
+    /**Esconda o teclado*/
+    public void esconderTeclado() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+
+    /**MUDAR IMAGENS NA TELA*/
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri imagemSelecionada = data.getData();
+        String caminhoImagem = imagemSelecionada.toString();
+
+        if(requestCode == 1){
+            imagem1.setImageURI(imagemSelecionada);
+        }else{
+            imagem2.setImageURI(imagemSelecionada);
+        }
+        listaFotosRecuperadas.add( caminhoImagem );
     }
 }

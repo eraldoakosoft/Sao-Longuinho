@@ -49,7 +49,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/background_caixa_texto">
+                    android:background="@drawable/background_caixa_de_text2">
 
 
 
@@ -83,59 +83,30 @@
 
                 <EditText
                     android:id="@+id/editTextCarNome"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="textPersonName"
                     android:hint="@string/nome_como_esta_no_cart_o"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
-                    android:background="@drawable/background_caixa_texto"/>
+                    style="@style/caixadetexto"
+                    />
 
                 <EditText
                     android:id="@+id/editTextCarBanco"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="textPersonName"
                     android:hint="Banco / Emissor do Cartão"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
-                    android:background="@drawable/background_caixa_texto"/>
+                    style="@style/caixadetexto"
+                    />
 
                 <EditText
                     android:id="@+id/editTextCar4Digitos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="number"
                     android:hint="Ultimos 4 digitos do Cartão"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
-                    android:background="@drawable/background_caixa_texto"/>
+                    style="@style/caixadetexto"/>
 
 
 
                 <TextView
                     android:id="@+id/textViewCarDataEncontrado1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:text="Data encontrado"
-                    android:textSize="18sp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:textColor="@color/colorBranco"
-                    android:background="@drawable/background_caixa_texto"
+                    style="@style/textview"
                     >
 
                 </TextView>
@@ -143,17 +114,9 @@
 
                 <EditText
                     android:id="@+id/editTextCarDescricao"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="text"
                     android:hint="@string/descri_o"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
-                    android:background="@drawable/background_caixa_texto"
+                    style="@style/caixadetexto"
                     />
 
                <LinearLayout
@@ -187,17 +150,8 @@
 
                 <Button
                     android:id="@+id/buttonCarAdicionar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:text="@string/adicionar"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:marqueeRepeatLimit="10"
-                    android:layout_marginBottom="10dp"
-                    android:textColor="@color/colorBranco"
-                    android:textSize="15sp"
-                    android:background="@drawable/background_caixa_texto"
+                    style="@style/button"
                     />
             </LinearLayout>
         </ScrollView>

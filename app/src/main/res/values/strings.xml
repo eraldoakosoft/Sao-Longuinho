@@ -76,4 +76,6 @@ aplicativo São Longuinho permite cadastrar objetos perdidos e encontrados e
     <string name="nome_como_esta_no_cart_o">Nome como esta no cartão</string>
     <string name="naturalidade">Naturalidade</string>
     <string name="data_que_voce_encontrou">Data Que Você Encontrou</string>
+    <string name="comentario">Comentario</string>
+    <string name="comentario">Comentario</string>
 </resources>

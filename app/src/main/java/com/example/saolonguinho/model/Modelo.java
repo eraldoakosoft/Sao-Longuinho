@@ -15,7 +15,7 @@ public class Modelo {
     private String dataInseridoNoBanco;
     private String dataSaida;
     private String dataEncontrado;
-    private String descricao;
+    private String comentario;
     private String ultimaAtualizacao;
     private List<String> fotos;
 
@@ -114,11 +114,11 @@ public class Modelo {
         this.dataEncontrado = dataEncontrado;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getComentario() {
+        return comentario;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
     }
 }

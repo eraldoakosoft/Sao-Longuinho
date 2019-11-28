@@ -177,7 +177,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         cartao.setBancoEmissor(banco);
         cartao.setDigitos(digitos);
         cartao.setDataEncontrado(dataEncontrado);
-        cartao.setDescricao(comentario);
+        cartao.setComentario(comentario);
         cartao.setTipo(tipo);
         cartao.setDataInseridoNoBanco(dataInseridoNoBanco);
         cartao.setIdLonguinho(idLonguinho);
@@ -249,10 +249,12 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.imageViewCarImagem1 :
+                esconderTeclado();
                 escolherImagem(1);
                 break;
 
             case R.id.imageViewCarImagem2 :
+                esconderTeclado();
                 escolherImagem(2);
                 break;
         }
@@ -339,6 +341,14 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
     /**METODO PARA MOSTRAR MENSAGENS DE ERRO*/
     public void exibirMensagemDeErro(String msm){
         Toast.makeText(AcheiCartaoActivity.this, msm, Toast.LENGTH_SHORT).show();
+    }
+
+    /**Esconda o teclado*/
+    public void esconderTeclado() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }
 

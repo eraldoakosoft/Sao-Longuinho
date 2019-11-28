@@ -32,7 +32,8 @@ import java.util.Date;
 public class AcheiDocVeiculoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     //VARIAVEIS LOCAIS PARA RECEBER DADOS DAS ACTIVITY
-    private EditText campoNome, campoCPF, campoPlaca, campoDataEncontrado, campoModelo, campoDescicao;
+    private EditText campoNome, campoCPF, campoPlaca, campoModelo, campoComentario;
+    private TextView  campoDataEncontrado;
     private Button btnAdicionar;
 
     private Spinner spinnerAVei;
@@ -61,7 +62,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         campoPlaca = findViewById(R.id.textViewDocVeiPlaca);
         campoDataEncontrado = findViewById(R.id.textViewDocVeiDataEncontrado);
         campoModelo = findViewById(R.id.textViewDocVeiModelo);
-        campoDescicao = findViewById(R.id.editTextVeiDescricao);
+        campoComentario = findViewById(R.id.editTextVeiDescricao);
         btnAdicionar = findViewById(R.id.buttonDocVeiAdicionar);
 
 
@@ -134,7 +135,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         documentoVeiculo.setNome(campoNome.getText().toString());
         documentoVeiculo.setPlaca(campoPlaca.getText().toString());
         documentoVeiculo.setModelo(campoModelo.getText().toString());
-        documentoVeiculo.setDescricao(campoDescicao.getText().toString());
+        documentoVeiculo.setComentario(campoComentario.getText().toString());
         documentoVeiculo.setDataInseridoNoBanco(getDateTime());
         documentoVeiculo.setUltimaAtualizacao(getDateTime());
         documentoVeiculo.setTipo(spinnerAVei.getSelectedItem().toString());

@@ -48,7 +48,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginEnd="10dp">
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/background_caixa_de_text2">
 
 
 
@@ -59,10 +61,7 @@
                         android:text="@string/tipo"
                         android:textSize="20sp"
                         android:textColor="@color/colorBranco"
-                        android:textAlignment="textStart"
-
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="5dp"/>
+                        />
                     <Spinner
                         android:id="@+id/spinnerAcheiVei"
                         android:scrollbarSize="20dp"
@@ -77,121 +76,69 @@
 
                 <EditText
                     android:id="@+id/textViewDocVeiNomeCompleto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="textPersonName"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
-                    android:hint="Nome Completo"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="15dp"/>
+                    android:hint="@string/nome_completo"
+                    style="@style/caixadetexto"
+                    />
 
                 <EditText
                     android:id="@+id/textViewDocVeiCPF"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="number"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
                     android:hint="CPF"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="15dp"/>
+                    style="@style/caixadetexto"
+                    />
 
                 <EditText
                     android:id="@+id/textViewDocVeiPlaca"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="text"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
                     android:hint="Placa"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="15dp"/>
+                    style="@style/caixadetexto"
+                    />
 
                 <EditText
                     android:id="@+id/textViewDocVeiModelo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
                     android:hint="Modelo / Marca"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="15dp"/>
+                    style="@style/caixadetexto"
+                    />
 
-                <EditText
+                <TextView
                     android:id="@+id/textViewDocVeiDataEncontrado"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="date"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
                     android:hint="Data Encontrado"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="15dp"/>
+                    style="@style/textview"
+                    />
 
 
                 <EditText
                     android:id="@+id/editTextVeiDescricao"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
                     android:inputType="text"
-                    android:hint="@string/descri_o"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
+                    android:hint="@string/comentario"
+                    style="@style/caixadetexto"
                     />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_margin="15dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
 
                     <ImageView
-                        android:layout_width="170dp"
-                        android:layout_height="110dp"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/ic_image_black_24dp"
                         android:id="@+id/imageViewVeiImagem1"
+                        style="@style/imagens"
                         />
 
                     <ImageView
-                        android:layout_width="170dp"
-                        android:layout_height="110dp"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/ic_image_black_24dp"
                         android:id="@+id/imageViewVeiImagem2"
+                        style="@style/imagens"
                         />
 
                 </LinearLayout>
 
-
-
                 <Button
                     android:id="@+id/buttonDocVeiAdicionar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:text="Adicionar"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/colorPrimaryDark"
-                    android:layout_marginBottom="30dp"
-                    android:textColor="@color/colorBranco"/>
+                    style="@style/button"
+                    />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
