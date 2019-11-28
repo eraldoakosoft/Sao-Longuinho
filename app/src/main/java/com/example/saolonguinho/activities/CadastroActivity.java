@@ -15,6 +15,8 @@ import com.example.saolonguinho.R;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.helper.Base64Custon;
 import com.example.saolonguinho.model.Usuario;
+import com.github.rtoshiro.util.format.SimpleMaskFormatter;
+import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -64,6 +66,12 @@ public class CadastroActivity extends AppCompatActivity {
         campoCEP = findViewById(R.id.editTextCEP);
         campoDataNascimento = findViewById(R.id.editTextDataNascimento);
         btnCastrar = findViewById(R.id.buttonCadastrar);
+
+        //criando a mascara para campo cpf
+        SimpleMaskFormatter smf = new SimpleMaskFormatter("NNN.NNN.NNN-NN");
+        MaskTextWatcher mtw = new MaskTextWatcher(campoCPF, smf);
+        campoCPF.addTextChangedListener(mtw);
+        //fim da mascara
 
 
         btnCastrar.setOnClickListener(new View.OnClickListener() {
