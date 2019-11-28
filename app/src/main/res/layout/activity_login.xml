@@ -42,7 +42,8 @@
             android:textColorHint="@color/colorBranco"
             android:layout_marginTop="45dp"
             android:layout_marginRight="30dp"
-            android:layout_marginLeft="30dp"/>
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/background_caixa_de_text2"/>
 
         <EditText
             android:id="@+id/editTextLoginSenha"
@@ -56,6 +57,7 @@
             android:hint="Senha"
             android:textColorHint="@color/colorBranco"
             android:textColor="@color/colorBranco"
+            android:background="@drawable/background_caixa_de_text2"
             />
 
         <Button
@@ -67,20 +69,22 @@
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="5dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/bacground_button"
             android:textColor="@color/colorBranco"/>
 
         <TextView
             android:id="@+id/textViewLoginCadastar"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cadastra-se"
+            android:layout_gravity="center"
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textColor="@color/colorBranco"
             android:layout_marginTop="25dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:background="@drawable/background_caixa_texto"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

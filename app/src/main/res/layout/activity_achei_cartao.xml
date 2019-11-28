@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -44,7 +45,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginEnd="10dp">
+                    android:padding="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/background_caixa_texto">
 
 
 
@@ -57,17 +62,17 @@
                         android:textColor="@color/colorBranco"
                         android:textAlignment="textStart"
                         android:layout_marginTop="8dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="5dp"/>
+                        />
+
                     <Spinner
                         android:id="@+id/spinnerAcheiCartao"
+                        android:layout_width="280dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="10dp"
                         android:scrollbarSize="20dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="8dp"
                         android:textAlignment="center"
+                        android:layout_marginLeft="30dp"
                         />
 
                 </LinearLayout>
@@ -82,12 +87,13 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName"
-                    android:hint="Nome como esta no cartão"
+                    android:hint="@string/nome_como_esta_no_cart_o"
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"/>
+                    android:textColorHint="@color/colorBranco"
+                    android:background="@drawable/background_caixa_texto"/>
 
                 <EditText
                     android:id="@+id/editTextCarBanco"
@@ -100,7 +106,8 @@
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"/>
+                    android:textColorHint="@color/colorBranco"
+                    android:background="@drawable/background_caixa_texto"/>
 
                 <EditText
                     android:id="@+id/editTextCar4Digitos"
@@ -113,21 +120,27 @@
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"/>
+                    android:textColorHint="@color/colorBranco"
+                    android:background="@drawable/background_caixa_texto"/>
 
-                <EditText
-                    android:id="@+id/editTextCarDataAchou"
+
+
+                <TextView
+                    android:id="@+id/textViewCarDataEncontrado1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="date"
-                    android:hint="Data encontrado"
+                    android:layout_height="match_parent"
+                    android:text="Data encontrado"
+                    android:textSize="18sp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/colorBranco"
-                    android:textColorHint="@color/colorBranco"
-                    />
+                    android:background="@drawable/background_caixa_texto"
+                    >
+
+                </TextView>
+
+
                 <EditText
                     android:id="@+id/editTextCarDescricao"
                     android:layout_width="match_parent"
@@ -140,28 +153,32 @@
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/colorBranco"
                     android:textColorHint="@color/colorBranco"
+                    android:background="@drawable/background_caixa_texto"
                     />
 
                <LinearLayout
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"
                    android:layout_margin="15dp"
-                   android:orientation="horizontal">
+                   android:orientation="horizontal"
+                   >
 
                    <ImageView
                        android:layout_width="150dp"
                        android:layout_height="100dp"
                        android:layout_margin="15dp"
-                       android:background="@drawable/ic_image_black_24dp"
+                       android:background="@drawable/background_caixa_texto"
                        android:id="@+id/imageViewCarImagem1"
+                       android:src="@drawable/ic_image_black_24dp"
                        />
 
                    <ImageView
                        android:layout_width="150dp"
                        android:layout_height="100dp"
                        android:layout_margin="15dp"
-                       android:background="@drawable/ic_image_black_24dp"
+                       android:background="@drawable/background_caixa_texto"
                        android:id="@+id/imageViewCarImagem2"
+                       android:src="@drawable/ic_image_black_24dp"
                       />
 
                </LinearLayout>
@@ -178,16 +195,10 @@
                     android:layout_marginRight="15dp"
                     android:marqueeRepeatLimit="10"
                     android:layout_marginBottom="10dp"
-                    android:background="@color/colorPrimaryDark"
                     android:textColor="@color/colorBranco"
                     android:textSize="15sp"
+                    android:background="@drawable/background_caixa_texto"
                     />
-
-
-
-
-
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

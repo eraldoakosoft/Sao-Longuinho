@@ -3,11 +3,14 @@ package com.example.saolonguinho.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.saolonguinho.MainActivity;
@@ -27,15 +30,17 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class CadastroActivity extends AppCompatActivity {
 
 
     //VARIAVEIS PARA PEGAR INFORMÇÕES SOBRE O USUARIO
-    private EditText campoCPF, campoRG, campoTelefone, campoDataNascimento;
+    private EditText campoCPF, campoRG, campoTelefone;
     private EditText campoNome, campoEmail, campoSenha;
     private EditText campoConfirmarSenha, campoCEP, campoNomeMae;
+    private TextView campoDataNascimento;
 
     //BOTÃO PARA DAR O EVENTO DE CADASTRO
     private Button btnCastrar;
@@ -45,6 +50,11 @@ public class CadastroActivity extends AppCompatActivity {
 
     //CLASSE USUARIO, OBJETO QUE VAI PARA O BANCO
     private Usuario usuario;
+
+    //CONFIGURAÇÃO PARA O CALENDARIO
+    Calendar calendar;
+    DatePickerDialog datePickerDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +82,27 @@ public class CadastroActivity extends AppCompatActivity {
         MaskTextWatcher mtw = new MaskTextWatcher(campoCPF, smf);
         campoCPF.addTextChangedListener(mtw);
         //fim da mascara
+
+
+        //EVENTO DE CLIQUE PARA A DATA NASCIMENTO
+        campoDataNascimento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendar = Calendar.getInstance();
+                int dia = calendar.get(Calendar.DAY_OF_MONTH);
+                int mes = calendar.get(Calendar.MONTH);
+                int ano = calendar.get(Calendar.YEAR);
+                datePickerDialog = new DatePickerDialog(CadastroActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        campoDataNascimento.setText(formatarData(dayOfMonth, month, year));
+                    }
+                }, dia, mes, ano);
+                datePickerDialog.getDatePicker().updateDate(ano, mes, dia);
+                datePickerDialog.show();
+
+            }
+        });
 
 
         btnCastrar.setOnClickListener(new View.OnClickListener() {
@@ -218,6 +249,22 @@ public class CadastroActivity extends AppCompatActivity {
         finish(); // Finaliza a Activity atual
 
         return;
+    }
+
+
+    /*METODA PARA FORMATAR DATA*/
+    public String formatarData(int dia, int mes, int ano){
+        String data;
+        if ( (mes+1) < 10 && dia < 10 ){
+            data = "0" + dia + "/0" + (mes+1) + "/" + ano;
+        }else if( (mes+1) < 10 ){
+            data = dia + "/0" + (mes+1) + "/" + ano;
+        }else if( dia < 10 ){
+            data = "0" + dia + "/" + (mes+1) + "/" + ano;
+        }else {
+            data = dia + "/" + (mes+1) + "/" + ano;
+            }
+        return data;
     }
 
 }

@@ -35,8 +35,9 @@ import java.util.Date;
 public class AcheiDocumentoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener{
 
     //VARIAVEIS LOCAIS PARA RECEBER O QUE VEM DA TELA
-    private EditText campoNome, campoCPF, campoRG, campoDataNascimento;
-    private EditText campoNomeMae, campoNaturalidade, campoDataEncontrado;
+    private EditText campoNome, campoCPF, campoRG;
+    private EditText campoNomeMae, campoNaturalidade;
+    private TextView campoDataEncontrado, campoDataNascimento;
     private Button btnAdicionar;
 
     //PEGAR INSTANCIA DO FIREBASE
@@ -62,8 +63,8 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
 
         //PASSANDO DADOS DA ACTIVITY PARA AS VARIAVEIS LOCAIS
         campoCPF = findViewById(R.id.editTextDocCpf);
-        campoDataEncontrado = findViewById(R.id.editTextDocDataEncontrado);
-        campoDataNascimento = findViewById(R.id.editTextDocDataNascimento);
+        campoDataEncontrado = findViewById(R.id.textViewDocDataEncontrado);
+        campoDataNascimento = findViewById(R.id.textViewDocDataNascimento);
         campoNaturalidade = findViewById(R.id.editTextDocNaturalidade);
         campoNome = findViewById(R.id.editTextDocNomeCompleto);
         campoNomeMae = findViewById(R.id.editTextDocNomeMae);
