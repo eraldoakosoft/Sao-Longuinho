@@ -159,9 +159,6 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         }
     }
 
-
-
-
     /**CONFIGURAR O CARTÃO*/
     private void configurarCartao(){
         String nome = campoNome.getText().toString().toUpperCase();
@@ -182,7 +179,6 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         cartao.setDataInseridoNoBanco(dataInseridoNoBanco);
         cartao.setIdLonguinho(idLonguinho);
         cartao.setUltimaAtualizacao(ultimaAtualizacao);
-
       }
 
 

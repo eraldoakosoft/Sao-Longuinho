@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -88,6 +89,7 @@ public class CadastroActivity extends AppCompatActivity {
         campoDataNascimento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                esconderTeclado();
                 calendar = Calendar.getInstance();
                 int dia = calendar.get(Calendar.DAY_OF_MONTH);
                 int mes = calendar.get(Calendar.MONTH);
@@ -265,6 +267,15 @@ public class CadastroActivity extends AppCompatActivity {
             data = dia + "/" + (mes+1) + "/" + ano;
             }
         return data;
+    }
+
+
+    /**Esconda o teclado*/
+    public void esconderTeclado() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
 }

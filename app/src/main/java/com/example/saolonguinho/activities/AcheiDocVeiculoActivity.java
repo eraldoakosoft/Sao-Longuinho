@@ -1,10 +1,16 @@
 package com.example.saolonguinho.activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -12,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,35 +29,52 @@ import com.example.saolonguinho.helper.Base64Custon;
 import com.example.saolonguinho.model.DocumentoVeiculo;
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
-public class AcheiDocVeiculoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+import dmax.dialog.SpotsDialog;
+
+public class AcheiDocVeiculoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener{
 
     //VARIAVEIS LOCAIS PARA RECEBER DADOS DAS ACTIVITY
     private EditText campoNome, campoCPF, campoPlaca, campoModelo, campoComentario;
     private TextView  campoDataEncontrado;
+    private ImageView imagem1, imagem2;
     private Button btnAdicionar;
 
     private Spinner spinnerAVei;
 
     //INSTACIA DO FIREBASE
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Item");
+    //private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Itens");
 
     //INSTANCIA PARA AUTENTICAÇÃO DO FIREBASE
-    FirebaseAuth firebaseAuth;
+    FirebaseAuth firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
     //INSTANCIA CLASSE DOCUMENTO VEICULO
-    private DocumentoVeiculo documentoVeiculo;
+    DocumentoVeiculo documentoVei = new DocumentoVeiculo();
 
     //CONFIGURAÇÃO PARA O CALENDARIO
     Calendar calendar;
     android.app.DatePickerDialog datePickerDialog;
+
+    private List<String> listaFotosRecuperadas = new ArrayList<>();
+    private List<String> listaURLFotos = new ArrayList<>();
+
+    private StorageReference storageReference1;
+
+    private AlertDialog alertDialog;
 
 
     @Override
@@ -59,6 +83,8 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         setContentView(R.layout.activity_achei_doc_veiculo);
         getSupportActionBar().hide();
 
+        storageReference1 = ConfiguracaoFirebase.getFirebaseStorage();
+
         campoCPF = findViewById(R.id.textViewDocVeiCPF);
         campoNome = findViewById(R.id.textViewDocVeiNomeCompleto);
         campoPlaca = findViewById(R.id.textViewDocVeiPlaca);
@@ -66,6 +92,12 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         campoModelo = findViewById(R.id.textViewDocVeiModelo);
         campoComentario = findViewById(R.id.editTextVeiDescricao);
         btnAdicionar = findViewById(R.id.buttonDocVeiAdicionar);
+
+        imagem1 = findViewById(R.id.imageViewVeiImagem1);
+        imagem2 = findViewById(R.id.imageViewVeiImagem2);
+        imagem1.setOnClickListener(this);
+        imagem2.setOnClickListener(this);
+
 
         //criando a mascara para campo cpf
         SimpleMaskFormatter smf = new SimpleMaskFormatter("NNN.NNN.NNN-NN");
@@ -80,7 +112,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         campoDataEncontrado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideSoftKeyboard();
+                esconderTeclado();
                 calendar = Calendar.getInstance();
                 int dia = calendar.get(Calendar.DAY_OF_MONTH);
                 int mes = calendar.get(Calendar.MONTH);
@@ -110,52 +142,13 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         btnAdicionar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                salvar();
+                configurarDocVei();
+                salvarDocVei();
             }
         });
 
     }
 
-
-    /**
-     * Esconda o teclado
-     */
-    public void hideSoftKeyboard() {
-        if(getCurrentFocus()!=null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-    }
-
-    public void salvar(){
-        //INSTANCIANDO UM NOVO DOCUMENTO VEICULO
-        documentoVeiculo = new DocumentoVeiculo();
-        //PEGAR O USUARIO PARA SABER QUEM ESTA ADICIONANDO AO BANCO,
-        firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
-        //STRING ONDE VAI SER SLAVO O EMAIL DA PESSOA QUE ESTA ADICIONANDO AO FIREBASE
-        String idUsuario = Base64Custon.codificarBase64( firebaseAuth.getCurrentUser().getEmail());
-
-
-        //PASSAR OS DADOS PARA O OBJETO DOCUMENTO VEICULO
-        documentoVeiculo.setCpf(campoCPF.getText().toString());
-        documentoVeiculo.setDataEncontrado(campoDataEncontrado.getText().toString());
-        documentoVeiculo.setIdLonguinho(idUsuario);
-        documentoVeiculo.setNome(campoNome.getText().toString());
-        documentoVeiculo.setPlaca(campoPlaca.getText().toString());
-        documentoVeiculo.setModelo(campoModelo.getText().toString());
-        documentoVeiculo.setComentario(campoComentario.getText().toString());
-        documentoVeiculo.setDataInseridoNoBanco(getDateTime());
-        documentoVeiculo.setUltimaAtualizacao(getDateTime());
-        documentoVeiculo.setTipo(spinnerAVei.getSelectedItem().toString());
-
-
-
-
-        reference.push().setValue(documentoVeiculo);
-        Toast.makeText(AcheiDocVeiculoActivity.this, "Salvo com Secesso!", Toast.LENGTH_SHORT).show();
-        finish();
-
-    }
 
     //METODO PARA PEGAR DATA E HORA DO SISTEMA
     private String getDateTime() {
@@ -194,4 +187,122 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
 
     }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.imageViewVeiImagem1 :
+                esconderTeclado();
+                escolherImgagem(1);
+                break;
+
+            case R.id.imageViewVeiImagem2 :
+                esconderTeclado();
+                escolherImgagem(2);
+                break;
+        }
+
+    }
+
+    /**Esconda o teclado*/
+    public void esconderTeclado() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    /**MOSTRAR MENSAGEM DE ERRO*/
+    public void exibirMensagemDeErro(String erro){
+        Toast.makeText(AcheiDocVeiculoActivity.this, erro,Toast.LENGTH_SHORT).show();
+    }
+
+    /**CONFIGURAR O DOCUMENTO DE VEICULO*/
+    public void configurarDocVei(){
+        String nome = campoNome.getText().toString();
+        String cpf = campoCPF.getText().toString();
+        String placa = campoPlaca.getText().toString();
+        String modelo = campoModelo.getText().toString();
+        String dataEncontrado = campoDataEncontrado.getText().toString();
+        String comentario = campoComentario.getText().toString();
+        String idLonguinho = Base64Custon.codificarBase64( firebaseAuth.getCurrentUser().getEmail() );
+        String tipo = spinnerAVei.getSelectedItem().toString();
+        documentoVei.setNome(nome);
+        documentoVei.setCpf(cpf);
+        documentoVei.setPlaca(placa);
+        documentoVei.setModelo(modelo);
+        documentoVei.setDataEncontrado(dataEncontrado);
+        documentoVei.setComentario(comentario);
+        documentoVei.setDataInseridoNoBanco(getDateTime());
+        documentoVei.setUltimaAtualizacao(getDateTime());
+        documentoVei.setIdLonguinho(idLonguinho);
+        documentoVei.setTipo(tipo);
+
+    }
+
+    /**ESCOLHER UMA IMAGEM*/
+    public void escolherImgagem(int requestCode){
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, requestCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri imagemSelecionada = data.getData();
+        String caminhoImagem = imagemSelecionada.toString();
+
+        if ( requestCode == 1 ){
+            imagem1.setImageURI( imagemSelecionada );
+        }else if ( requestCode == 2 ){
+            imagem2.setImageURI( imagemSelecionada );
+        }
+        listaFotosRecuperadas.add( caminhoImagem );
+    }
+
+    /** METODO PARA SALVAR FOTOS NO FIREBASE*/
+    public void salvarFotoStorage(String urlString, final int totalFotos, int contador){
+
+        StorageReference imagem = storageReference1.child("imagens").child(documentoVei.getIdItem()).child("imagem"+contador);
+
+
+        /** FAZER UPLOAD DAS FOTOS */
+        UploadTask uploadTask = imagem.putFile(Uri.parse(urlString));
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> firebaseUrl = taskSnapshot.getStorage().getDownloadUrl();
+                while (!firebaseUrl.isComplete());
+                Uri firebase = firebaseUrl.getResult();
+                String urlConvertida = firebase.toString();
+                listaURLFotos.add( urlConvertida );
+
+                if( totalFotos == listaURLFotos.size() ){
+                    documentoVei.setFotos( listaURLFotos );
+                    documentoVei.salvar();
+                    alertDialog.dismiss();
+                    finish();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                exibirMensagemDeErro("FALHA AO FAZER UPLOAD!");
+            }
+        });
+    }
+
+    /**METODO PARA SALVAR*/
+    public void salvarDocVei(){
+
+        alertDialog = new SpotsDialog.Builder().setContext(AcheiDocVeiculoActivity.this).setMessage("Salvando").build();
+        alertDialog.show();
+
+        /**SALVAR NO STORAGE*/
+        for( int i=0; i < listaFotosRecuperadas.size(); i++ ){
+            String urlImagem = listaFotosRecuperadas.get(i);
+            int tamenhoLista = listaFotosRecuperadas.size();
+            salvarFotoStorage(urlImagem, tamenhoLista, i);
+        }
+    }
 }
