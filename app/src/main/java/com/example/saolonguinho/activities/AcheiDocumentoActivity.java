@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.saolonguinho.R;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.helper.Base64Custon;
+import com.example.saolonguinho.helper.DadosDeUsuarios;
 import com.example.saolonguinho.helper.Permissoes;
 import com.example.saolonguinho.model.Documento;
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
@@ -74,6 +75,7 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
 
     //INSTACIAR A CLASSE DOCUMENTO
     private Documento documento = new Documento();
+    DadosDeUsuarios dadosDeUsuarios = new DadosDeUsuarios();
     //PEGAR INISTACIA DO FIREBASE AUTH
     private FirebaseAuth firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
 
@@ -185,39 +187,6 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
 
     }
 
-
-    /*
-    //METODO PARA SALVAR
-    public void salvar(){
-        //INSTACIANDO UM NOVO OBJETO DOCUMENTO
-        documento = new Documento();
-
-        //PEGAR O USUARIO PARA SABER QUEM ESTA ADICIONANDO AO BANCO,
-        firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
-        //STRING ONDE VAI SER SLAVO O EMAIL DA PESSOA QUE ESTA ADICIONANDO AO FOREBASE
-        String idUsuario = Base64Custon.codificarBase64( firebaseAuth.getCurrentUser().getEmail());
-
-        //PASSANDO OS DADOS PARA O OBJETO DOCUMENTO
-        documento.setCpf(campoCPF.getText().toString());
-        documento.setDataEncontrado(campoDataEncontrado.getText().toString());
-        documento.setDataNascimento(campoDataNascimento.getText().toString());
-        documento.setRg(campoRG.getText().toString());
-        documento.setNomeMae(campoNomeMae.getText().toString());
-        documento.setNome(campoNome.getText().toString());
-        documento.setDataInseridoNoBanco(getDateTime());
-        documento.setUltimaAtualizacao(getDateTime());
-        documento.setIdLonguinho(idUsuario);
-        documento.setTipo(spinnerADoc.getSelectedItem().toString());
-
-        //MANDANDO PARA O FIREBASE
-        //reference.push().setValue(documento);
-        //Toast.makeText(AcheiDocumentoActivity.this, "Salvo com Sucesso!", Toast.LENGTH_SHORT).show();
-        //finish();
-
-
-    }
-     */
-
     //METODO PARA PEGAR DATA E HORA DO SISTEMA
     private String getDateTime() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -321,6 +290,7 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         String idLonguinho = Base64Custon.codificarBase64(firebaseAuth.getCurrentUser().getEmail());
         String ultimaAtualizacao = getDateTime();
         String dataInseridoNoBanco = getDateTime();
+        String nomeLonguinho = dadosDeUsuarios.pegarNome();
         documento.setNome(nome);
         documento.setCpf(cpf);
         documento.setRg(rg);
@@ -332,6 +302,7 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         documento.setIdLonguinho(idLonguinho);
         documento.setUltimaAtualizacao(ultimaAtualizacao);
         documento.setDataInseridoNoBanco(dataInseridoNoBanco);
+        documento.setNomeLonguinho(nomeLonguinho);
     }
 
     /**EXIBIR MENSAGEM DE ERRO*/

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.saolonguinho.R;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.helper.Base64Custon;
+import com.example.saolonguinho.helper.DadosDeUsuarios;
 import com.example.saolonguinho.model.DocumentoVeiculo;
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
@@ -64,6 +65,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
     FirebaseAuth firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
     //INSTANCIA CLASSE DOCUMENTO VEICULO
     DocumentoVeiculo documentoVei = new DocumentoVeiculo();
+    DadosDeUsuarios dadosDeUsuarios = new DadosDeUsuarios();
 
     //CONFIGURAÇÃO PARA O CALENDARIO
     Calendar calendar;
@@ -75,6 +77,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
     private StorageReference storageReference1;
 
     private AlertDialog alertDialog;
+
 
 
     @Override
@@ -227,6 +230,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         String comentario = campoComentario.getText().toString();
         String idLonguinho = Base64Custon.codificarBase64( firebaseAuth.getCurrentUser().getEmail() );
         String tipo = spinnerAVei.getSelectedItem().toString();
+        String nomeLonguinho = dadosDeUsuarios.pegarNome();
         documentoVei.setNome(nome);
         documentoVei.setCpf(cpf);
         documentoVei.setPlaca(placa);
@@ -237,6 +241,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         documentoVei.setUltimaAtualizacao(getDateTime());
         documentoVei.setIdLonguinho(idLonguinho);
         documentoVei.setTipo(tipo);
+        documentoVei.setNomeLonguinho(nomeLonguinho);
 
     }
 

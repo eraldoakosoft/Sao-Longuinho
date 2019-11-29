@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.saolonguinho.R;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.helper.Base64Custon;
+import com.example.saolonguinho.helper.DadosDeUsuarios;
 import com.example.saolonguinho.helper.Permissoes;
 import com.example.saolonguinho.model.Cartao;
 
@@ -81,6 +82,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
 
     //
     Cartao cartao = new Cartao();
+    DadosDeUsuarios dadosDeUsuarios = new DadosDeUsuarios();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         campoDataAchou.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                esconderTeclado();
                 calendar = Calendar.getInstance();
                 int dia = calendar.get(Calendar.DAY_OF_MONTH);
                 int mes = calendar.get(Calendar.MONTH);
@@ -170,6 +173,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         String idLonguinho = Base64Custon.codificarBase64( firebaseAuth.getCurrentUser().getEmail());
         String ultimaAtualizacao = getDateTime();
         String dataInseridoNoBanco = getDateTime();
+        String nomeLonguinho = dadosDeUsuarios.pegarNome();
         cartao.setNome(nome);
         cartao.setBancoEmissor(banco);
         cartao.setDigitos(digitos);
@@ -178,6 +182,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         cartao.setTipo(tipo);
         cartao.setDataInseridoNoBanco(dataInseridoNoBanco);
         cartao.setIdLonguinho(idLonguinho);
+        cartao.setNomeLonguinho(nomeLonguinho);
         cartao.setUltimaAtualizacao(ultimaAtualizacao);
       }
 

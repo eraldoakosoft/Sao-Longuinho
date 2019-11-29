@@ -36,12 +36,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 public class HomeFragment extends Fragment {
 
     //CRIANDO ATRIBUTO PARA RECICLEVIEW
     private RecyclerView recyclerView;
     private List<Cartao> listaCartao = new ArrayList<>();
     private AdapterCard adapterCard;
+
+    //PEGAR INSTANCIA DO FIREBASE
+    private DatabaseReference referenceUsuario = FirebaseDatabase.getInstance().getReference().child("Usuarioss");
+    private FirebaseAuth firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
 
 
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Itens");
@@ -61,7 +66,6 @@ public class HomeFragment extends Fragment {
         //CONFIGURAR RECYCLER VIEW
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setHasFixedSize(true);
-        //recyclerView.
         adapterCard = new AdapterCard(listaCartao, this.getContext());
         recyclerView.setAdapter(adapterCard);
 
@@ -70,13 +74,15 @@ public class HomeFragment extends Fragment {
 
 
     private void recuperarCartoes(){
-        reference.addValueEventListener(new ValueEventListener() {
+
+        Query pesquisa = reference.orderByChild("status").equalTo(true);
+        pesquisa.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listaCartao.clear();
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     listaCartao.add(ds.getValue(Cartao.class));
-                    //System.out.println("--------------------------------");
+
 
                 }
 
@@ -90,6 +96,18 @@ public class HomeFragment extends Fragment {
 
             }
         });
+    }
+
+    public void verificar(){
+        Cartao cardVareficar = new Cartao();
+        for(int i=0; i < listaCartao.size(); i++){
+            cardVareficar = listaCartao.get(i);
+            if(1==i){
+
+            }
+
+        }
+
     }
 
 }

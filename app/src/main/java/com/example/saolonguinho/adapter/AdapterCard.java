@@ -38,7 +38,7 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.MyViewHolder> 
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Cartao cartao = cartoes.get(position);
         holder.nome.setText(cartao.getNome());
-        holder.nomeQuemAchou.setText(cartao.getIdLonguinho());
+        holder.nomeQuemAchou.setText(cartao.getNomeLonguinho());
         holder.dataPublicacao.setText(cartao.getDataInseridoNoBanco());
         holder.dataEncontrado.setText(cartao.getDataEncontrado());
         holder.tipo.setText(cartao.getTipo());
