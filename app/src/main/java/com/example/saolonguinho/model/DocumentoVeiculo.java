@@ -14,6 +14,11 @@ public class DocumentoVeiculo extends Modelo{
         reference.push().setValue(this);
     }
 
+    public DocumentoVeiculo() {
+        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebase().child("Itens");
+        setIdItem(databaseReference.push().getKey());
+    }
+
     public String getCpf() {
         return cpf;
     }

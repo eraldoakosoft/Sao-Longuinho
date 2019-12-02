@@ -14,6 +14,11 @@ public class Documento  extends Modelo{
         reference.push().setValue(this);
     }
 
+    public Documento() {
+        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebase().child("Itens");
+        setIdItem(databaseReference.push().getKey());
+    }
+
     public String getCpf() {
         return cpf;
     }

@@ -52,8 +52,6 @@ public class Modelo {
     }
 
     public Modelo() {
-        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebase().child("Itens");
-        setIdItem(databaseReference.push().getKey());
         this.status = true;
         this.dataSaida = "00/00/0000";
     }

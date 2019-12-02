@@ -15,6 +15,11 @@ public class Cartao extends Modelo {
         reference.push().setValue(this);
     }
 
+    public Cartao() {
+        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebase().child("Itens");
+        setIdItem(databaseReference.push().getKey());
+    }
+
     public String getBancoEmissor() {
         return bancoEmissor;
     }

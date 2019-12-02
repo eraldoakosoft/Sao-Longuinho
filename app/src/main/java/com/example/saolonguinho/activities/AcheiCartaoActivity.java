@@ -33,6 +33,7 @@ import com.example.saolonguinho.helper.DadosDeUsuarios;
 import com.example.saolonguinho.helper.Permissoes;
 import com.example.saolonguinho.model.Cartao;
 
+import com.example.saolonguinho.model.VerificarIgual;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -83,6 +84,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
     //
     Cartao cartao = new Cartao();
     DadosDeUsuarios dadosDeUsuarios = new DadosDeUsuarios();
+    VerificarIgual verificarIgual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,6 +186,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         cartao.setIdLonguinho(idLonguinho);
         cartao.setNomeLonguinho(nomeLonguinho);
         cartao.setUltimaAtualizacao(ultimaAtualizacao);
+
       }
 
 
@@ -350,6 +353,14 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
+    }
+
+    /**VERIFICAR SE TEM ALGUEM COM OS DADOS*/
+    public void pesquisaNome(String nome){
+        verificarIgual = new VerificarIgual(nome);
+
+        System.out.println("---------------------------------------");
+        System.out.println("ID IGUAL"+verificarIgual.buscarPorNome());
     }
 }
 

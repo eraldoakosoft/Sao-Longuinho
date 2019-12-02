@@ -15,6 +15,8 @@ public class Usuario {
     private String dataNascimento;
     private String nomeDaMae;
     private boolean status;
+    private String notificacao;
+
     //DATA EM QUE O USUARIO FEZ O SEU CADASTRO NO FIREBASE
     private String dataCadastroNoBanco;
 
@@ -118,5 +120,13 @@ public class Usuario {
 
     public void setDataCadastroNoBanco(String dataCadastroNoBanco) {
         this.dataCadastroNoBanco = dataCadastroNoBanco;
+    }
+
+    public String getNotificacao() {
+        return notificacao;
+    }
+
+    public void setNotificacao(String notificacao) {
+        this.notificacao = notificacao;
     }
 }
