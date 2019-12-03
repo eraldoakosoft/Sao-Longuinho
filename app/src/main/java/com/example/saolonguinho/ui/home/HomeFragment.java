@@ -20,9 +20,11 @@ import com.example.saolonguinho.MainActivity;
 import com.example.saolonguinho.R;
 import com.example.saolonguinho.adapter.Adapter;
 import com.example.saolonguinho.adapter.AdapterCard;
+import com.example.saolonguinho.adapter.AdapterModelo;
 import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.model.Cartao;
 import com.example.saolonguinho.model.Documento;
+import com.example.saolonguinho.model.Modelo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -42,14 +44,16 @@ public class HomeFragment extends Fragment {
     //CRIANDO ATRIBUTO PARA RECICLEVIEW
     private RecyclerView recyclerView;
     private List<Cartao> listaCartao = new ArrayList<>();
-    private AdapterCard adapterCard;
+    private List<Modelo> listModel = new ArrayList<>();
+    //private AdapterCard adapterCard;
+    private AdapterModelo adapterModelo;
 
     //PEGAR INSTANCIA DO FIREBASE
     private DatabaseReference referenceUsuario = FirebaseDatabase.getInstance().getReference().child("Usuarioss");
     private FirebaseAuth firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
 
 
-    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Itens");
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Modelo");
 
     private HomeViewModel homeViewModel;
 
@@ -66,8 +70,9 @@ public class HomeFragment extends Fragment {
         //CONFIGURAR RECYCLER VIEW
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setHasFixedSize(true);
-        adapterCard = new AdapterCard(listaCartao, this.getContext());
-        recyclerView.setAdapter(adapterCard);
+        //adapterCard = new AdapterCard(listaCartao, this.getContext());
+        adapterModelo = new AdapterModelo(listModel, this.getContext());
+        recyclerView.setAdapter(adapterModelo);
 
         return root;
     }
@@ -79,15 +84,16 @@ public class HomeFragment extends Fragment {
         pesquisa.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                listaCartao.clear();
+                //listaCartao.clear();
+                listModel.clear();
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
-                    listaCartao.add(ds.getValue(Cartao.class));
-
-
+                    //listaCartao.add(ds.getValue(Cartao.class));
+                    listModel.add( ds.getValue(Modelo.class) );
                 }
 
-                Collections.reverse(listaCartao);
-                adapterCard.notifyDataSetChanged();
+                //Collections.reverse(listaCartao);
+                Collections.reverse(listModel);
+                adapterModelo.notifyDataSetChanged();
 
             }
 
@@ -98,16 +104,5 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public void verificar(){
-        Cartao cardVareficar = new Cartao();
-        for(int i=0; i < listaCartao.size(); i++){
-            cardVareficar = listaCartao.get(i);
-            if(1==i){
-
-            }
-
-        }
-
-    }
 
 }

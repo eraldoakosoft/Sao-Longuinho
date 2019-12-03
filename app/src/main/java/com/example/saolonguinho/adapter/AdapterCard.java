@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +29,7 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.MyViewHolder> 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_home_card, parent,false);
+        View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_cartao, parent,false);
         return new MyViewHolder(item);
     }
 
@@ -38,10 +37,16 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.MyViewHolder> 
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Cartao cartao = cartoes.get(position);
         holder.nome.setText(cartao.getNome());
-        holder.nomeQuemAchou.setText(cartao.getNomeLonguinho());
+        holder.nomeLonguinho.setText(cartao.getNomeLonguinho());
         holder.dataPublicacao.setText(cartao.getDataInseridoNoBanco());
         holder.dataEncontrado.setText(cartao.getDataEncontrado());
         holder.tipo.setText(cartao.getTipo());
+        holder.emissor.setText(cartao.getBancoEmissor());
+        holder.comentario.setText(cartao.getComentario());
+        holder.dataSiada.setText(cartao.getDataSaida());
+        holder.digitos.setText(cartao.getDigitos());
+        holder.ultimaAtualizacao.setText(cartao.getUltimaAtualizacao());
+        holder.status.setText(cartao.getStatus().toString());
 
         //PEGAR A PRIMEIRA IMAGEM DA LISTA
         List<String> urlFotos = cartao.getFotos();
@@ -60,9 +65,15 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.MyViewHolder> 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView tipo;
+        TextView emissor;
+        TextView comentario;
+        TextView dataSiada;
+        TextView digitos;
+        TextView nomeLonguinho;
+        TextView status;
+        TextView ultimaAtualizacao;
         TextView nome;
         TextView dataEncontrado;
-        TextView nomeQuemAchou;
         TextView dataPublicacao;
         ImageView foto;
         TextView ver;
@@ -71,13 +82,18 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.MyViewHolder> 
         public MyViewHolder(View itemView){
             super(itemView);
 
-            tipo = itemView.findViewById(R.id.textViewAdapterCardTipo);
-            nome = itemView.findViewById(R.id.textViewAdapterCardNome);
-            dataEncontrado = itemView.findViewById(R.id.textViewAdapterCardEncotrado);
-            dataPublicacao = itemView.findViewById(R.id.textViewAdapterCardDataPublicacao);
-            nomeQuemAchou = itemView.findViewById(R.id.textViewAdapterCardNomeAchou);
-            foto = itemView.findViewById(R.id.imageViewFoto);
-            ver = itemView.findViewById(R.id.textViewVer);
+            tipo = itemView.findViewById(R.id.textViewAdapterCartaoTipo);
+            nome = itemView.findViewById(R.id.textViewAdapterCartaoNome);
+            dataEncontrado = itemView.findViewById(R.id.textViewAdapterCartaoDataEncontrado);
+            dataPublicacao = itemView.findViewById(R.id.textViewAdapterCartaoDataAdicionado);
+            nomeLonguinho = itemView.findViewById(R.id.textViewAdapterCartaoNomeLonguinho);
+            foto = itemView.findViewById(R.id.imageViewAdapterLista);
+            emissor = itemView.findViewById(R.id.textViewAdapterCartaoEmissor);
+            comentario = itemView.findViewById(R.id.textViewAdapterCartaoComentario);
+            dataSiada = itemView.findViewById(R.id.textViewAdapterCartaoDataSaida);
+            digitos = itemView.findViewById(R.id.textViewAdapterCartaoDigitos);
+            status = itemView.findViewById(R.id.textViewAdapterCartaoStatus);
+            ultimaAtualizacao = itemView.findViewById(R.id.textViewAdapterCartaoUltimaAtualizacao);
 
 
         }

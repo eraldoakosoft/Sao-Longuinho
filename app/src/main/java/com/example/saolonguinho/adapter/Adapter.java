@@ -26,7 +26,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemLista = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_lista, parent, false);
+                .inflate(R.layout.adapter_cartao, parent, false);
         return new MyViewHolder(itemLista);
     }
 
@@ -57,11 +57,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            tipo = itemView.findViewById(R.id.textViewTipo);
-            dataEncontrado = itemView.findViewById(R.id.textViewDataEncontrado);
-            dataPublicacao = itemView.findViewById(R.id.textViewDataPublicacao);
-            nome = itemView.findViewById(R.id.textViewNomePerdeu);
-            nomeAchou = itemView.findViewById(R.id.textViewNomeAchou);
+
 
 
 

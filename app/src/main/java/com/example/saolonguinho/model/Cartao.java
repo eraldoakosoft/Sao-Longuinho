@@ -8,16 +8,17 @@ public class Cartao extends Modelo {
     private String bancoEmissor;
     //ULTIMOS 4 DIGITOS DO CARTÃO
     private String digitos;
+    private DatabaseReference reference = ConfiguracaoFirebase.getFirebase().child("Cartao");
 
 
     public void salvar(){
-        DatabaseReference reference = ConfiguracaoFirebase.getFirebase().child("Itens");
-        reference.push().setValue(this);
+        reference.child(getIdItem()).setValue(this);
     }
 
     public Cartao() {
-        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebase().child("Itens");
-        setIdItem(databaseReference.push().getKey());
+        this.setIdItem(reference.push().getKey());
+        this.setStatus(true);
+        this.setDataSaida("00/00/0000");
     }
 
     public String getBancoEmissor() {

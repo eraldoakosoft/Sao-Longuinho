@@ -1,19 +1,18 @@
-package com.example.saolonguinho.ui.tools;
+package com.example.saolonguinho.ui.notificacao;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ToolsViewModel extends ViewModel {
+public class NotificacaoViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ToolsViewModel() {
+    public NotificacaoViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is tools fragment");
     }
 
-    public LiveData<String> getText() {
+    public LiveData<String> getText(){
         return mText;
     }
 }

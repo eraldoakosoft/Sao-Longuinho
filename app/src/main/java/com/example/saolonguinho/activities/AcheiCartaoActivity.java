@@ -33,6 +33,7 @@ import com.example.saolonguinho.helper.DadosDeUsuarios;
 import com.example.saolonguinho.helper.Permissoes;
 import com.example.saolonguinho.model.Cartao;
 
+import com.example.saolonguinho.model.Modelo;
 import com.example.saolonguinho.model.VerificarIgual;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -84,6 +85,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
     //
     Cartao cartao = new Cartao();
     DadosDeUsuarios dadosDeUsuarios = new DadosDeUsuarios();
+    Modelo modelo = new Modelo();
     VerificarIgual verificarIgual;
 
     @Override
@@ -186,6 +188,16 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         cartao.setIdLonguinho(idLonguinho);
         cartao.setNomeLonguinho(nomeLonguinho);
         cartao.setUltimaAtualizacao(ultimaAtualizacao);
+
+        modelo.setComentario(comentario);
+        modelo.setDataEncontrado(dataEncontrado);
+        modelo.setDataInseridoNoBanco(dataInseridoNoBanco);
+        modelo.setUltimaAtualizacao(ultimaAtualizacao);
+        modelo.setNome(nome);
+        modelo.setNomeLonguinho(nomeLonguinho);
+        modelo.setTipo("Cartão: "+tipo);
+        modelo.setStatus(true);
+
 
       }
 
@@ -313,6 +325,8 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
                 if ( totalFotos == listaURLFotos.size() ){
                     cartao.setFotos(listaURLFotos);
                     cartao.salvar();
+                    modelo.setFotos( listaURLFotos );
+                    modelo.salvarModelo();
                     alertDialog.dismiss();
                     finish();
                 }

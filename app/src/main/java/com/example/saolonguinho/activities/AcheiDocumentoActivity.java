@@ -32,6 +32,7 @@ import com.example.saolonguinho.helper.Base64Custon;
 import com.example.saolonguinho.helper.DadosDeUsuarios;
 import com.example.saolonguinho.helper.Permissoes;
 import com.example.saolonguinho.model.Documento;
+import com.example.saolonguinho.model.Modelo;
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 
@@ -76,6 +77,7 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
     //INSTACIAR A CLASSE DOCUMENTO
     private Documento documento = new Documento();
     DadosDeUsuarios dadosDeUsuarios = new DadosDeUsuarios();
+    private Modelo modelo = new Modelo();
     //PEGAR INISTACIA DO FIREBASE AUTH
     private FirebaseAuth firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
 
@@ -257,6 +259,8 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
                 if( totalFotos == listaUrlFotos.size() ){
                     documento.setFotos( listaUrlFotos );
                     documento.salvar();
+                    modelo.setFotos( listaUrlFotos );
+                    modelo.salvarModelo();
                     alertDialog.dismiss();
                     finish();
                 }
@@ -303,6 +307,16 @@ public class AcheiDocumentoActivity extends AppCompatActivity implements Adapter
         documento.setUltimaAtualizacao(ultimaAtualizacao);
         documento.setDataInseridoNoBanco(dataInseridoNoBanco);
         documento.setNomeLonguinho(nomeLonguinho);
+
+        modelo.setComentario(comentario);
+        modelo.setDataEncontrado(dataEncontrado);
+        modelo.setDataInseridoNoBanco(dataInseridoNoBanco);
+        modelo.setUltimaAtualizacao(ultimaAtualizacao);
+        modelo.setNome(nome);
+        modelo.setNomeLonguinho(nomeLonguinho);
+        modelo.setTipo("Documento: "+tipo);
+        modelo.setStatus(true);
+
     }
 
     /**EXIBIR MENSAGEM DE ERRO*/

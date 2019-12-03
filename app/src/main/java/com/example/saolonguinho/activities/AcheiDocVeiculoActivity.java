@@ -28,14 +28,20 @@ import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.example.saolonguinho.helper.Base64Custon;
 import com.example.saolonguinho.helper.DadosDeUsuarios;
 import com.example.saolonguinho.model.DocumentoVeiculo;
+import com.example.saolonguinho.model.Modelo;
+import com.example.saolonguinho.model.Usuario;
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -59,7 +65,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
     private Spinner spinnerAVei;
 
     //INSTACIA DO FIREBASE
-    //private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Itens");
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Usuarioss");
 
     //INSTANCIA PARA AUTENTICAÇÃO DO FIREBASE
     FirebaseAuth firebaseAuth = ConfiguracaoFirebase.getFirebaseAutenticacao();
@@ -73,10 +79,14 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
 
     private List<String> listaFotosRecuperadas = new ArrayList<>();
     private List<String> listaURLFotos = new ArrayList<>();
+    private List<Usuario> listaUsuarios = new ArrayList<>();
 
     private StorageReference storageReference1;
 
     private AlertDialog alertDialog;
+    private AlertDialog alertDialog2;
+
+    private Modelo modelo = new Modelo();
 
 
 
@@ -168,11 +178,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     public void formatarData(int dia, int mes, int ano){
         String data = "00/00/0000";
@@ -189,8 +195,6 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         campoDataEncontrado.setText(data);
 
     }
-
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -225,7 +229,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         String nome = campoNome.getText().toString();
         String cpf = campoCPF.getText().toString();
         String placa = campoPlaca.getText().toString();
-        String modelo = campoModelo.getText().toString();
+        String marca = campoModelo.getText().toString();
         String dataEncontrado = campoDataEncontrado.getText().toString();
         String comentario = campoComentario.getText().toString();
         String idLonguinho = Base64Custon.codificarBase64( firebaseAuth.getCurrentUser().getEmail() );
@@ -234,7 +238,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         documentoVei.setNome(nome);
         documentoVei.setCpf(cpf);
         documentoVei.setPlaca(placa);
-        documentoVei.setModelo(modelo);
+        documentoVei.setModelo(marca);
         documentoVei.setDataEncontrado(dataEncontrado);
         documentoVei.setComentario(comentario);
         documentoVei.setDataInseridoNoBanco(getDateTime());
@@ -242,6 +246,19 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
         documentoVei.setIdLonguinho(idLonguinho);
         documentoVei.setTipo(tipo);
         documentoVei.setNomeLonguinho(nomeLonguinho);
+
+        modelo.setComentario(comentario);
+        modelo.setDataEncontrado(dataEncontrado);
+        modelo.setDataInseridoNoBanco(getDateTime());
+        modelo.setUltimaAtualizacao(getDateTime());
+        modelo.setNome(nome);
+        modelo.setNomeLonguinho(nomeLonguinho);
+        modelo.setTipo("Documento Veiculo: "+tipo);
+        modelo.setIdItem(documentoVei.getIdItem());
+        modelo.setStatus(true);
+
+
+        buscarCPF(cpf);
 
     }
 
@@ -285,7 +302,10 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
                 if( totalFotos == listaURLFotos.size() ){
                     documentoVei.setFotos( listaURLFotos );
                     documentoVei.salvar();
+                    modelo.setFotos( listaURLFotos );
+                    modelo.salvarModelo();
                     alertDialog.dismiss();
+                    notificarBanco();
                     finish();
                 }
             }
@@ -310,4 +330,55 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
             salvarFotoStorage(urlImagem, tamenhoLista, i);
         }
     }
+
+    /**MEDOTO PARA VERIFICAR SE TEM ALGUEM IGUAL AO QUE ESTA SENDO ADICIONADO USANDO CPF*/
+    public void buscarCPF(String cpf){
+        Query pesquisaCpf = reference.orderByChild("cpf").equalTo(cpf);
+
+            pesquisaCpf.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    listaUsuarios.clear();
+                    for( DataSnapshot ds: dataSnapshot.getChildren() ){
+                        listaUsuarios.add( ds.getValue(Usuario.class) );
+                    }
+                    System.out.println("++++++++++++++++++++++++++++++++++++++++++++");
+                    System.out.println("Tamano da Lista: " + listaUsuarios.size());
+                    //notificarBanco();
+                    //notify();
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+            });
+
+
+
+    }
+
+    /**METODO PARA NOTIFICAR O USUARIO DONO DO OBJETO ENCONTRADO*/
+    public void notificarBanco(){
+        Usuario user = new Usuario();
+
+        if (!listaUsuarios.isEmpty()) {
+            for (int i = 0; i < listaUsuarios.size(); i++) {
+                user = listaUsuarios.get(i);
+            }
+            user.setNotificacao("Achei o seu CRVL");
+            reference.child(user.getIdUsuario()).setValue(user);
+            System.out.println("------------------------");
+            System.out.println("CPF: " + user.getCpf());
+
+        }else{
+            System.out.println("------------------------");
+            System.out.println("Lista Vazia");
+
+        }
+
+
+
+    }
+
 }

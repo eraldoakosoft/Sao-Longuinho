@@ -18,6 +18,15 @@ public class Modelo {
     private String comentario;
     private String ultimaAtualizacao;
     private List<String> fotos;
+    private DatabaseReference reference = ConfiguracaoFirebase.getFirebase().child("Modelo");
+
+    public Modelo() {
+        this.setIdItem(reference.push().getKey());
+    }
+
+    public void salvarModelo(){
+        reference.child(getIdItem()).setValue(this);
+    }
 
     public String getIdItem() {
         return idItem;
@@ -49,11 +58,6 @@ public class Modelo {
 
     public void setUltimaAtualizacao(String ultimaAtualizacao) {
         this.ultimaAtualizacao = ultimaAtualizacao;
-    }
-
-    public Modelo() {
-        this.status = true;
-        this.dataSaida = "00/00/0000";
     }
 
     public String getNome() {

@@ -4,19 +4,29 @@ import com.example.saolonguinho.config.ConfiguracaoFirebase;
 import com.google.firebase.database.DatabaseReference;
 
 public class Documento  extends Modelo{
+    private String idDocumento;
     private String cpf;
     private String rg;
     private String nomeMae;
     private String dataNascimento;
+    private DatabaseReference reference = ConfiguracaoFirebase.getFirebase().child("Documento");
 
     public void salvar(){
-        DatabaseReference reference = ConfiguracaoFirebase.getFirebase().child("Itens");
-        reference.push().setValue(this);
+        reference.child(getIdDocumento()).setValue(this);
     }
 
     public Documento() {
-        DatabaseReference databaseReference = ConfiguracaoFirebase.getFirebase().child("Itens");
-        setIdItem(databaseReference.push().getKey());
+        this.setIdDocumento(reference.push().getKey());
+        this.setStatus(true);
+        this.setDataSaida("00/00/0000");
+    }
+
+    public String getIdDocumento() {
+        return idDocumento;
+    }
+
+    public void setIdDocumento(String idDocumento) {
+        this.idDocumento = idDocumento;
     }
 
     public String getCpf() {

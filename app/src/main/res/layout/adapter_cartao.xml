@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_layout_adapter_cartao"
+    android:layout_marginRight="6dp"
+    android:layout_marginLeft="6dp"
+    android:layout_marginTop="5dp"
+    >
+
+    <ImageView
+
+        android:id="@+id/imageViewAdapterLista"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_image_black_24dp"/>
+
+    <LinearLayout
+        style="@style/layoutMeusItens">
+
+        <TextView
+            android:text="Tipo :"
+            style="@style/textViewMeusItens1"
+            />
+        <TextView
+            android:id="@+id/textViewAdapterCartaoTipo"
+            android:text="Tipo"
+            style="@style/textViewMeusItens2"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/layoutMeusItens">
+
+        <TextView
+            android:text="Nome :"
+            style="@style/textViewMeusItens1"
+            />
+        <TextView
+            android:id="@+id/textViewAdapterCartaoNome"
+            android:text="Nome"
+            style="@style/textViewMeusItens2"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/layoutMeusItens">
+
+        <TextView
+            style="@style/textViewMeusItens1"
+            android:text="Banco / Emissor :"
+            />
+
+        <TextView
+            android:id="@+id/textViewAdapterCartaoEmissor"
+            android:text="Banco / Emissor"
+            style="@style/textViewMeusItens2"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/layoutMeusItens">
+
+        <TextView
+            style="@style/textViewMeusItens1"
+            android:text="Data Encontrado :"
+            />
+        <TextView
+            android:id="@+id/textViewAdapterCartaoDataEncontrado"
+            android:text="Data Encontrado"
+            style="@style/textViewMeusItens2"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/layoutMeusItens">
+        <TextView
+            style="@style/textViewMeusItens1"
+            android:text="Digitos :"
+            />
+        <TextView
+            android:id="@+id/textViewAdapterCartaoDigitos"
+            android:text="Digitos"
+            style="@style/textViewMeusItens2"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/layoutMeusItens">
+
+        <TextView
+            style="@style/textViewMeusItens1"
+            android:text="Nome Longuinho :"
+            />
+        <TextView
+            android:id="@+id/textViewAdapterCartaoNomeLonguinho"
+            android:text="Nome Longuinho"
+            style="@style/textViewMeusItens2"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/layoutMeusItens">
+
+        <TextView
+            style="@style/textViewMeusItens1"
+            android:text="Status: "
+            />
+        <TextView
+            android:id="@+id/textViewAdapterCartaoStatus"
+            android:text="Status"
+            style="@style/textViewMeusItens2"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/layoutMeusItens">
+
+        <TextView
+            style="@style/textViewMeusItens1"
+            android:text="Ultima Atualização: "
+            />
+        <TextView
+            android:id="@+id/textViewAdapterCartaoUltimaAtualizacao"
+            android:text="Ultima Atualização"
+            style="@style/textViewMeusItens2"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/layoutMeusItens">
+
+        <TextView
+            style="@style/textViewMeusItens1"
+            android:text="Data Adicionado: "
+            />
+        <TextView
+            android:id="@+id/textViewAdapterCartaoDataAdicionado"
+            android:text="Data Adicionado"
+            style="@style/textViewMeusItens2"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/layoutMeusItens">
+
+        <TextView
+            style="@style/textViewMeusItens1"
+            android:text="Data Saida: "
+            />
+        <TextView
+            android:id="@+id/textViewAdapterCartaoDataSaida"
+            android:text="Data Saida"
+            style="@style/textViewMeusItens2"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/layoutMeusItens">
+
+        <TextView
+            style="@style/textViewMeusItens1"
+            android:text="Comentario: "
+            />
+        <TextView
+            android:id="@+id/textViewAdapterCartaoComentario"
+            android:text="Comentario"
+            style="@style/textViewMeusItens2"
+            />
+    </LinearLayout>
+</LinearLayout>

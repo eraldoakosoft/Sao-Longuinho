@@ -16,6 +16,12 @@ public class Usuario {
     private String nomeDaMae;
     private boolean status;
     private String notificacao;
+    private String pontos;
+
+    public Usuario() {
+        this.pontos = "0";
+        this.notificacao = "Vazio";
+    }
 
     //DATA EM QUE O USUARIO FEZ O SEU CADASTRO NO FIREBASE
     private String dataCadastroNoBanco;
@@ -128,5 +134,13 @@ public class Usuario {
 
     public void setNotificacao(String notificacao) {
         this.notificacao = notificacao;
+    }
+
+    public String getPontos() {
+        return pontos;
+    }
+
+    public void setPontos(String pontos) {
+        this.pontos = pontos;
     }
 }

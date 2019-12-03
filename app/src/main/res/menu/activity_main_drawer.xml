@@ -22,6 +22,11 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/menu_tools" />
 
+        <item
+            android:id="@+id/nav_notificacao"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/menu_notificacao" />
+
 
             <item
                 android:id="@+id/nav_share"
