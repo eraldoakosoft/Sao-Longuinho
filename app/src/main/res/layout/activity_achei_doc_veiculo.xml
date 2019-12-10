@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Documento Veiculo"
-                    android:textColor="@color/colorBranco"
+                    android:textColor="@color/colorBlack"
                     android:textSize="30sp"
                     android:textAlignment="center"
                     android:layout_marginTop="25dp"
@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/tipo"
                         android:textSize="20sp"
-                        android:textColor="@color/colorBranco"
+                        android:textColor="@color/colorBlack"
                         />
                     <Spinner
                         android:id="@+id/spinnerAcheiVei"

@@ -8,7 +8,7 @@
         android:color="@color/colorPrimaryDark"
         />
     <corners
-        android:radius="2dp"
+        android:radius="10dp"
         />
     <stroke
         android:width="2dp"

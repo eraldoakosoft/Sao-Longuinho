@@ -146,8 +146,6 @@
 
                </LinearLayout>
 
-
-
                 <Button
                     android:id="@+id/buttonCarAdicionar"
                     android:text="@string/adicionar"
