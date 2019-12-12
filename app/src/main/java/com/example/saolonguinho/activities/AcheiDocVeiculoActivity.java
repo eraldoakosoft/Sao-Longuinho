@@ -366,7 +366,7 @@ public class AcheiDocVeiculoActivity extends AppCompatActivity implements Adapte
             for (int i = 0; i < listaUsuarios.size(); i++) {
                 user = listaUsuarios.get(i);
             }
-            user.setNotificacao("Achei o seu CRVL");
+            user.setNotificacao("Achei o seu " + documentoVei.getTipo());
             reference.child(user.getIdUsuario()).setValue(user);
             System.out.println("------------------------");
             System.out.println("CPF: " + user.getCpf());

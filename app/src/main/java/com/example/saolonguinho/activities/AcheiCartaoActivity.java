@@ -34,11 +34,18 @@ import com.example.saolonguinho.helper.Permissoes;
 import com.example.saolonguinho.model.Cartao;
 
 import com.example.saolonguinho.model.Modelo;
+import com.example.saolonguinho.model.Usuario;
 import com.example.saolonguinho.model.VerificarIgual;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -61,6 +68,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
     private ImageView imagem1, imagem2;
     private List<String> listaFotosRecuperadas = new ArrayList<>();
     private List<String> listaURLFotos = new ArrayList<>();
+    private List<Usuario> listaUsuario = new ArrayList<>();
 
     //RECUPERAR O OBJETO STORAGE
     private StorageReference storageReference;
@@ -70,7 +78,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
     private Spinner spinnerAC;
 
     //PEGAR INSTANCIA DO FIREBASE
-    //private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Item");
+    private DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Usuarioss");
 
     //PEGAR INISTACIA DO FIREBASE AUTH
     private FirebaseAuth firebaseAuth  = ConfiguracaoFirebase.getFirebaseAutenticacao();
@@ -197,6 +205,8 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
         modelo.setNomeLonguinho(nomeLonguinho);
         modelo.setTipo("Cartão: "+tipo);
         modelo.setStatus(true);
+
+        buscarNome(nome);
 
 
       }
@@ -328,6 +338,7 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
                     modelo.setFotos( listaURLFotos );
                     modelo.salvarModelo();
                     alertDialog.dismiss();
+                    notificarBanco();
                     finish();
                 }
 
@@ -375,6 +386,46 @@ public class AcheiCartaoActivity extends AppCompatActivity implements AdapterVie
 
         System.out.println("---------------------------------------");
         System.out.println("ID IGUAL"+verificarIgual.buscarPorNome());
+    }
+
+    /**MEDOTO PARA VERIFICAR SE TEM ALGUEM IGUAL AO QUE ESTA SENDO ADICIONADO USANDO CPF*/
+    public void buscarNome(String cpf){
+
+        Query pesquisaCpf = reference.orderByChild("nome").equalTo(cpf);
+        pesquisaCpf.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listaUsuario.clear();
+                for ( DataSnapshot ds: dataSnapshot.getChildren() ){
+                    listaUsuario.add( ds.getValue(Usuario.class) );
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    /**METODO PARA NOTIFICAR O USUARIO DONO DO OBJETO ENCONTRADO*/
+    public void notificarBanco(){
+        Usuario usuario = new Usuario();
+
+        if( !listaUsuario.isEmpty() ){
+            for ( int i=0; i<listaUsuario.size(); i++ ){
+                usuario = listaUsuario.get(i);
+            }
+            usuario.setNotificacao("Achei o seu " + cartao.getTipo() +" Meu nuemro " + dadosDeUsuarios.pegarTelefone() );
+            reference.child(usuario.getIdUsuario()).setValue(usuario);
+            System.out.println("------------------------");
+            System.out.println("Nome: " + usuario.getNome());
+        }else {
+            System.out.println("------------------------");
+            System.out.println("Lista Vazia");
+
+        }
     }
 }
 

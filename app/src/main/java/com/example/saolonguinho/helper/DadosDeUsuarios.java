@@ -22,6 +22,7 @@ public class DadosDeUsuarios  {
     private Usuario usuario;
     private String nome;
     private String email;
+    private String telefone;
     public List<Usuario> LisUsuarios = new ArrayList<>();
 
     public DadosDeUsuarios() {
@@ -37,12 +38,15 @@ public class DadosDeUsuarios  {
 
             }
         });
+
+
+
     }
 
 
 
     public String pegarNome(){
-        nome = usuario.getNome();
+        this.nome = usuario.getNome();
         return nome;
     }
 
@@ -50,6 +54,11 @@ public class DadosDeUsuarios  {
         email = firebaseAuth.getCurrentUser().getEmail();
         return email;
 
+    }
+
+    public String pegarTelefone(){
+        this.telefone = usuario.getTelefone();
+        return telefone;
     }
 
 }
